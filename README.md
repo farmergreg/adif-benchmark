@@ -12,32 +12,26 @@ Finally, the results were sorted from fastest to slowest.
 
 ## Read Benchmark
 
-``` bash
-goos: linux
-goarch: amd64
-pkg: github.com/hamradiolog-net/adif-benchmark
-cpu: AMD Ryzen 9 7950X 16-Core Processor
-BenchmarkReadHamRadioLogDotNet-32           1879            652189 ns/op          680965 B/op       9613 allocs/op
-BenchmarkReadMatir-32                        817           1475977 ns/op         1728723 B/op      38665 allocs/op
-BenchmarkReadJSON-32                         704           1700731 ns/op          402586 B/op      25602 allocs/op
-BenchmarkReadEminlin-32                      206           5844909 ns/op         4868143 B/op      93010 allocs/op
-PASS
-ok      github.com/hamradiolog-net/adif-benchmark       4.842s
-```
+## Read Benchmark
+
+| Library | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+|---------|------------|--------------|---------------|-------------|
+| HamRadioLogDotNet | 1879 ⭐ | 652189 ⭐ | 680965 | 9613 ⭐ |
+| Matir | 817 | 1475977 | 1728723 | 38665 |
+| JSON | 704 | 1700731 | 402586 ⭐ | 25602 |
+| Eminlin | 206 | 5844909 | 4868143 | 93010 |
 
 ## Write Benchmark
 
-``` bash
-goos: linux
-goarch: amd64
-pkg: github.com/hamradiolog-net/adif-benchmark
-cpu: AMD Ryzen 9 7950X 16-Core Processor
-BenchmarkWriteHamRadioLogDotNet-32          2044            565809 ns/op          514410 B/op         20 allocs/op
-BenchmarkWriteJSON-32                       1016           1185991 ns/op          976643 B/op      17805 allocs/op
-BenchmarkWriteMatir-32                       596           1977880 ns/op         1490387 B/op      28673 allocs/op
-PASS
-ok      github.com/hamradiolog-net/adif-benchmark       3.550s
-```
+| Library | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+|---------|------------|--------------|---------------|-------------|
+| HamRadioLogDotNet | 2044 ⭐ | 565809 ⭐ | 514410 ⭐ | 20 ⭐ |
+| JSON | 1016 | 1185991 | 976643 | 17805 |
+| Matir | 596 | 1977880 | 1490387 | 28673 |
+
+**Note:** ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
+
+
 
 ## Related Projects
 
