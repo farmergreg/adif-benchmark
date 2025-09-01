@@ -6,7 +6,7 @@ import (
 
 	_ "embed"
 
-	"github.com/hamradiolog-net/adif"
+	"github.com/hamradiolog-net/adif/v4"
 )
 
 //go:embed testdata/N3FJP-AClogAdif.adi

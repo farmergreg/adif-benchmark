@@ -5,8 +5,7 @@ go 1.25.0
 require (
 	github.com/Eminlin/GoADIFLog v0.0.0-20230310080720-51e6fad1c012
 	github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437
-	github.com/hamradiolog-net/adif v1.0.2
-	github.com/hamradiolog-net/adif-spec v1.0.13
+	github.com/hamradiolog-net/adif/v4 v4.0.6
 )
 
-require github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1 // indirect
+require github.com/hamradiolog-net/adif-spec/v6 v6.0.0-beta.6 // indirect

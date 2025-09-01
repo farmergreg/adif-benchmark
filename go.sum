@@ -2,9 +2,7 @@ github.com/Eminlin/GoADIFLog v0.0.0-20230310080720-51e6fad1c012 h1:9jk7mfP0IfufR
 github.com/Eminlin/GoADIFLog v0.0.0-20230310080720-51e6fad1c012/go.mod h1:mcMDppVais4AI3S803uYE9Mts7KVicyiZn4NllBQ6gs=
 github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437 h1:bravWZ8akTqGcbN8CiYXQ74WVRvv5HfUUuHVQ34s6Xg=
 github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437/go.mod h1:FrRQMGHkxX+CKufTY3SM7WM395NhLiOdx5//5Yi6+aI=
-github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1 h1:FWNFq4fM1wPfcK40yHE5UO3RUdSNPaBC+j3PokzA6OQ=
-github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1/go.mod h1:5YoVOkjYAQumqlV356Hj3xeYh4BdZuLE0/nRkf2NKkI=
-github.com/hamradiolog-net/adif v1.0.2 h1:3lcjhcOXOUszuAJM3qhkA15ORNiZU7WFnRskEUa7aDY=
-github.com/hamradiolog-net/adif v1.0.2/go.mod h1:QgnN9IGRJlQCiX5iA4Jq84R8Ww3GZMMhMS2RSuffbZY=
-github.com/hamradiolog-net/adif-spec v1.0.13 h1:Tz8Z2VJqUn1PV7b77UF0y448SULVHAnN6gGnv03cJgc=
-github.com/hamradiolog-net/adif-spec v1.0.13/go.mod h1:C5u6WCMHd3MKhliC8h27+og2SG7i1jYpCMkodhuGORc=
+github.com/hamradiolog-net/adif-spec/v6 v6.0.0-beta.6 h1:a9lnxLHrNB+VfNkWp23iQgV00nNoaW3FfJEt5ExWS2c=
+github.com/hamradiolog-net/adif-spec/v6 v6.0.0-beta.6/go.mod h1:XAAslZANuhEuLWOv08GbKI0hXEcj+huIXO5su7YWlgA=
+github.com/hamradiolog-net/adif/v4 v4.0.6 h1:KBmBeRTy/g9Sc95lwixgspoA/0K/jSZ2BAyoTtdoQvU=
+github.com/hamradiolog-net/adif/v4 v4.0.6/go.mod h1:qXkipRJRvwDulD0zELL5LiiZy1KjZwwKdNUiaApufqU=

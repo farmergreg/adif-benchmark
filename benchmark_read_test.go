@@ -9,7 +9,7 @@ import (
 	eminlin "github.com/Eminlin/GoADIFLog"
 	eminlinformat "github.com/Eminlin/GoADIFLog/format"
 	matir "github.com/Matir/adifparser"
-	"github.com/hamradiolog-net/adif"
+	"github.com/hamradiolog-net/adif/v4"
 )
 
 func BenchmarkReadEminlin(b *testing.B) {
