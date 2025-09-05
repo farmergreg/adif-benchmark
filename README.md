@@ -40,6 +40,6 @@ Finally, the results were sorted from fastest to slowest.
 
 If you found this library useful, you may also be interested in the following projects:
 
-- [World's Fastest ADIF Parser](https://github.com/hamradiolog-net/adif)
+- [World's Fastest ADIF Parser](https://github.com/hamradiolog-net/adif-parser)
 - [Go ADIF Parser Benchmarks](https://github.com/hamradiolog-net/adif-benchmark)
 - [Go ADIF Specification](https://github.com/hamradiolog-net/adif-spec)
