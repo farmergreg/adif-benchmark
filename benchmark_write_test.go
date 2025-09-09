@@ -8,14 +8,14 @@ import (
 	_ "embed"
 
 	matir "github.com/Matir/adifparser"
-	"github.com/hamradiolog-net/adif-parser/v5"
+	"github.com/hamradiolog-net/adif/v5"
 )
 func BenchmarkWriteHamRadioLogDotNet(b *testing.B) {
 	qsoListNative := loadTestData()
 	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		w := adif.NewADIWriter(&sb)
+		w := adif.NewADIRecordWriter(&sb)
 		w.Write(qsoListNative)
 		_ = sb.String()
 	}

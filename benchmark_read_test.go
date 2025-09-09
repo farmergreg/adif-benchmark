@@ -17,7 +17,7 @@ func BenchmarkReadHamRadioLogDotNet(b *testing.B) {
 
 	for b.Loop() {
 		qsoList = make([]adif.ADIFRecord, 0, 10000)
-		p := adif.NewADIReader(strings.NewReader(benchmarkFile), false)
+		p := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
 		for {
 			q, err := p.Next()
 			if err == io.EOF {

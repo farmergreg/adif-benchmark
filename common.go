@@ -7,7 +7,7 @@ import (
 
 	_ "embed"
 
-	"github.com/hamradiolog-net/adif-parser/v5"
+	"github.com/hamradiolog-net/adif/v5"
 )
 
 //go:embed testdata/N3FJP-AClogAdif.adi
@@ -15,8 +15,8 @@ var benchmarkFile string
 
 func benchmarkFileAsJSON() []byte {
 	var buffer bytes.Buffer
-	src := adif.NewADIReader(strings.NewReader(benchmarkFile), false)
-	dst := adif.NewADIJWriter(&buffer)
+	src := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
+	dst := adif.NewJSONRecordWriter(&buffer)
 	srcRecords := make([]adif.ADIFRecord, 0, 10000)
 	for {
 		record, err := src.Next()
@@ -34,7 +34,7 @@ func benchmarkFileAsJSON() []byte {
 
 func loadTestData() []adif.ADIFRecord {
 	var qsoListNative []adif.ADIFRecord
-	p := adif.NewADIReader(strings.NewReader(benchmarkFile), false)
+	p := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
 	for {
 		record, err := p.Next()
 		if err == io.EOF {

@@ -71,13 +71,13 @@ var adiWriterBufferPool = sync.Pool{
 	},
 }
 
-// NewADIWriter returns an ADIFRecordWriter that can write ADIF *.adi formatted records.
-func NewADIWriter(w io.Writer) *adiWriter {
-	return NewADIWriterWithPreamble(w, adiHeaderPreamble)
+// NewADIRecordWriter returns an ADIFRecordWriter that can write ADIF *.adi formatted records.
+func NewADIRecordWriter(w io.Writer) *adiWriter {
+	return NewADIRecordWriterWithPreamble(w, adiHeaderPreamble)
 }
 
-// NewADIWriterWithPreamble returns an ADIFRecordWriter that can write ADIF *.adi formatted records with a custom preamble for header records.
-func NewADIWriterWithPreamble(w io.Writer, adiPreamble string) *adiWriter {
+// NewADIRecordWriterWithPreamble returns an ADIFRecordWriter that can write ADIF *.adi formatted records with a custom preamble for header records.
+func NewADIRecordWriterWithPreamble(w io.Writer, adiPreamble string) *adiWriter {
 	return &adiWriter{
 		w:              w,
 		headerPreamble: adiPreamble,

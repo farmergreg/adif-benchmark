@@ -6,15 +6,7 @@ github.com/Eminlin/GoADIFLog/tools
 # github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437
 ## explicit; go 1.11
 github.com/Matir/adifparser
-# github.com/hamradiolog-net/adif-parser/v5 v5.0.0-beta.1
-## explicit; go 1.25
-github.com/hamradiolog-net/adif-parser/v5
-# github.com/hamradiolog-net/adif-spec/v6 v6.0.0-beta.14
-## explicit; go 1.25
-github.com/hamradiolog-net/adif-spec/v6/adifield
-github.com/hamradiolog-net/adif-spec/v6/internal/codegen
-github.com/hamradiolog-net/adif-spec/v6/spectype
-# github.com/hamradiolog-net/adif/v5 v5.0.0-beta.2
+# github.com/hamradiolog-net/adif/v5 v5.0.0-beta.4
 ## explicit; go 1.25
 github.com/hamradiolog-net/adif/v5
 # github.com/hamradiolog-net/spec/v6 v6.0.0-beta.15

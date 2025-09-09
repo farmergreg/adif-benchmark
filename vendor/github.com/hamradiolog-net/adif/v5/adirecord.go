@@ -15,12 +15,12 @@ type adiRecord struct {
 	isFieldStructDirty bool
 }
 
-// NewADIRecord creates a new Record with the default initial capacity.
+// NewADIRecord creates a new adiRecord with the default initial capacity.
 func NewADIRecord() *adiRecord {
 	return NewADIRecordWithCapacity(-1)
 }
 
-// NewADIRecordWithCapacity creates a new Record with a specific initial capacity.
+// NewADIRecordWithCapacity creates a new adiRecord with a specific initial capacity.
 func NewADIRecordWithCapacity(initialCapacity int) *adiRecord {
 	if initialCapacity < 1 {
 		initialCapacity = 7

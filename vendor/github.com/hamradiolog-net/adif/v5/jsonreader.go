@@ -7,19 +7,19 @@ import (
 	"github.com/hamradiolog-net/spec/v6/adifield"
 )
 
-var _ ADIFRecordReader = (*adijReader)(nil)
+var _ ADIFRecordReader = (*jsonReader)(nil)
 
-// adijReader implements ADIFRecordReader for reading ADIF records in ADIJ format.
-type adijReader struct {
+// jsonReader implements ADIFRecordReader for reading ADIF records in ADIJ format.
+type jsonReader struct {
 	document     *adifDocument
 	currentIndex int
 	skipHeader   bool
 }
 
-// NewADIJReader returns an ADIFRecordReader that can parse ADIF records in ADIJ JSON format.
+// NewJSONRecordReader returns an ADIFRecordReader that can parse ADIF records in ADIJ JSON format.
 // If skipHeader is true, Next() will not return the header record if it exists.
 // This implementation reads the entire JSON document into memory when this constructor is called.
-func NewADIJReader(r io.Reader, skipHeader bool) (*adijReader, error) {
+func NewJSONRecordReader(r io.Reader, skipHeader bool) (*jsonReader, error) {
 	var doc adifDocument
 	decoder := json.NewDecoder(r)
 	err := decoder.Decode(&doc)
@@ -27,7 +27,7 @@ func NewADIJReader(r io.Reader, skipHeader bool) (*adijReader, error) {
 		return nil, err
 	}
 
-	reader := &adijReader{
+	reader := &jsonReader{
 		document:     &doc,
 		currentIndex: -1,
 		skipHeader:   skipHeader,
@@ -38,7 +38,7 @@ func NewADIJReader(r io.Reader, skipHeader bool) (*adijReader, error) {
 
 // Next reads and returns the next Record.
 // It returns io.EOF when no more records are available.
-func (r *adijReader) Next() (ADIFRecord, error) {
+func (r *jsonReader) Next() (ADIFRecord, error) {
 	if r.currentIndex >= len(r.document.Records) {
 		return nil, io.EOF
 	}
@@ -60,7 +60,7 @@ func (r *adijReader) Next() (ADIFRecord, error) {
 }
 
 // mapToADIRecord converts a map of ADIField to string into an ADIFRecord
-func (r *adijReader) mapToADIRecord(fieldMap map[adifield.ADIField]string) ADIFRecord {
+func (r *jsonReader) mapToADIRecord(fieldMap map[adifield.ADIField]string) ADIFRecord {
 	record := NewADIRecord()
 	for field, value := range fieldMap {
 		record.Set(field, value)

@@ -7,19 +7,19 @@ import (
 	"github.com/hamradiolog-net/spec/v6/adifield"
 )
 
-var _ ADIFRecordWriter = (*adijWriter)(nil)
+var _ ADIFRecordWriter = (*jsonWriter)(nil)
 
-// adijWriter implements ADIFRecordWriter for writing ADIF records in ADIJ format.
-type adijWriter struct {
+// jsonWriter implements ADIFRecordWriter for writing ADIF records in ADIJ format.
+type jsonWriter struct {
 	w io.Writer
 }
 
-func NewADIJWriter(w io.Writer) *adijWriter {
-	return &adijWriter{w: w}
+func NewJSONRecordWriter(w io.Writer) *jsonWriter {
+	return &jsonWriter{w: w}
 }
 
 // Write implements ADIFRecordWriter.Write for writing ADIF records in ADIJ format.
-func (aw *adijWriter) Write(records []ADIFRecord) error {
+func (aw *jsonWriter) Write(records []ADIFRecord) error {
 	doc := &adifDocument{}
 	if len(records) > 0 && records[0].IsHeader() {
 		doc.Header = adijRecordToMap(records[0])
