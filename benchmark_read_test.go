@@ -9,7 +9,7 @@ import (
 	eminlin "github.com/Eminlin/GoADIFLog"
 	eminlinformat "github.com/Eminlin/GoADIFLog/format"
 	matir "github.com/Matir/adifparser"
-	"github.com/hamradiolog-net/adif-parser/v5"
+	"github.com/hamradiolog-net/adif/v5"
 )
 
 func BenchmarkReadHamRadioLogDotNet(b *testing.B) {

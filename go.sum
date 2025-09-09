@@ -6,3 +6,7 @@ github.com/hamradiolog-net/adif-parser/v5 v5.0.0-beta.1 h1:Qj84SQT0I5XU0M5J2KEnp
 github.com/hamradiolog-net/adif-parser/v5 v5.0.0-beta.1/go.mod h1:Wo+nkR2aER5QelGml8WjzMNZru1M6F+M/XAzFwBZwik=
 github.com/hamradiolog-net/adif-spec/v6 v6.0.0-beta.14 h1:p7xg/0cHDRlFDLT65D6dEdadrAWl2JObd3jZlv8JHDM=
 github.com/hamradiolog-net/adif-spec/v6 v6.0.0-beta.14/go.mod h1:XAAslZANuhEuLWOv08GbKI0hXEcj+huIXO5su7YWlgA=
+github.com/hamradiolog-net/adif/v5 v5.0.0-beta.2 h1:k0Ilso6oJ2y7/0+Rk43DQxFadZ3e/VJwixZb/+UauWA=
+github.com/hamradiolog-net/adif/v5 v5.0.0-beta.2/go.mod h1:fDtiyFan7rBfIKoAcDaGiYSuW+CYchvYmfMPMna51NU=
+github.com/hamradiolog-net/spec/v6 v6.0.0-beta.15 h1:reKMBhr2DEsdg3dtCWsSTPSwfkJSNWSJtsSzNikOMhA=
+github.com/hamradiolog-net/spec/v6 v6.0.0-beta.15/go.mod h1:pVgHeVUKWLo733V1E6FdOHjtfVk39/TSzBL51Dcv1YY=
