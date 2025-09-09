@@ -8,42 +8,16 @@ import (
 	_ "embed"
 
 	matir "github.com/Matir/adifparser"
+	"github.com/hamradiolog-net/adif-parser/v5"
 )
-
-/*
-// Eminlin does not support writing adi files
-func BenchmarkWriteEminlin(b *testing.B) {
-}
-*/
-
 func BenchmarkWriteHamRadioLogDotNet(b *testing.B) {
 	qsoListNative := loadTestData()
-	var writeCountADI int
-
+	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		writeCountADI = 0
-		for _, qso := range qsoListNative {
-			qso.WriteTo(&sb)
-			writeCountADI++
-		}
+		w := adif.NewADIWriter(&sb)
+		w.Write(qsoListNative)
 		_ = sb.String()
-	}
-
-	if len(qsoListNative) != writeCountADI {
-		b.Errorf("Write count mismatch: ADI %d, expected %d", writeCountADI, len(qsoListNative))
-	}
-}
-
-func BenchmarkWriteJSON(b *testing.B) {
-	qsoListNative := loadTestData()
-
-	for b.Loop() {
-		data, err := json.Marshal(qsoListNative)
-		if err != nil {
-			b.Fatal(err)
-		}
-		_ = string(data)
 	}
 }
 
@@ -66,5 +40,28 @@ func BenchmarkWriteMatir(b *testing.B) {
 			mw.WriteRecord(qso)
 		}
 		_ = sb.String()
+	}
+}
+
+/*
+// Eminlin does not support writing adi files
+func BenchmarkWriteEminlin(b *testing.B) {
+}
+*/
+
+func BenchmarkWriteJSONReference(b *testing.B) {
+	jsonRecords := benchmarkFileAsJSON()
+	document := adifDocument{}
+	err := json.Unmarshal(jsonRecords, &document)
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	b.ResetTimer()
+	for b.Loop() {
+		_, err := json.Marshal(document)
+		if err != nil {
+			panic(err)
+		}
 	}
 }

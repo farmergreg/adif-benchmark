@@ -15,26 +15,22 @@ Finally, the results were sorted from fastest to slowest.
 
 ## Read Benchmark
 
-## Read Benchmark
-
 | Library | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
 |---------|------------|--------------|---------------|-------------|
-| HamRadioLogDotNet | 1879 ⭐ | 652189 ⭐ | 680965 | 9613 ⭐ |
-| Matir | 817 | 1475977 | 1728723 | 38665 |
-| JSON | 704 | 1700731 | 402586 ⭐ | 25602 |
-| Eminlin | 206 | 5844909 | 4868143 | 93010 |
+| HamRadioLogDotNet | 2108 ⭐ | 542296 ⭐ | 784000 | 10053 ⭐ |
+| Matir | 910 | 1317076 | 1728733 | 38665 |
+| JSON | 703 | 1737457 | 255230 ⭐ | 25604 |
+| Eminlin | 231 | 5137402 | 4866837 | 93010 |
 
 ## Write Benchmark
 
 | Library | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
 |---------|------------|--------------|---------------|-------------|
-| HamRadioLogDotNet | 2044 ⭐ | 565809 ⭐ | 514410 ⭐ | 20 ⭐ |
-| JSON | 1016 | 1185991 | 976643 | 17805 |
-| Matir | 596 | 1977880 | 1490387 | 28673 |
+| HamRadioLogDotNet | 2659 ⭐ | 422924 ⭐ | 516745 ⭐ | 23 ⭐ |
+| JSON | 1156 | 1035884 | 810801 | 17803 |
+| Matir | 652 | 1809427 | 1490410 | 28673 |
 
 **Note:** ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
-
-
 
 ## Related Projects
 

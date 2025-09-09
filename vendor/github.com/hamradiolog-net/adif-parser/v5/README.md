@@ -11,10 +11,10 @@ It's idiomatic, developer-friendly API seamlessly integrates with your codebase 
 
 ## ✨ Features
 
-- 🔧 **Developer Friendly**: Clean, idiomatic Go interfaces
+- 🔧 **Developer Friendly**: Clean, idiomatic, mock friendly interfaces
 - 🚀 **Blazing Fast**: 3-20x faster than other ADI libraries; more than 2x faster than Go's native JSON marshaling!
 - 💡 **Memory Efficient**: Up to 1400x fewer memory allocations than alternatives
-- 🔬 **Tested**: Comprehensive test coverage ensures reliability
+- 🔬 **Tested**: This library has 100% test coverage!
 
 ## 🚀 Quick Start
 
@@ -22,31 +22,18 @@ It's idiomatic, developer-friendly API seamlessly integrates with your codebase 
 go get github.com/hamradiolog-net/adif@latest
 ```
 
-1) [Document](./example_document_test.go): Complete ADI file operations using `io.Reader`/`io.Writer`
-2) [ADIFReader](./example_adireader_test.go): Stream-based parsing of ADI records using `io.Reader`
-3) [Record](./example_record_test.go): Single record operations using `io.Reader`/`io.Writer`
+1) [Example Processing ADI Files](./example_adi_test.go): If you're not sure, use this!
+2) [Example Processing ADIJ Files](./example_adij.go): ADIJ is a proposed ADI container that represents ADIF data as json.
+3) ADX XML Processing: Not implemented. PR(s) welcome!
 
 ## Benchmarks
 
-JSON marshaling is included as a baseline for comparison.
+TLDR: The ADI parser is very fast, possibly the fastest in the world.
+Please see the [Go ADIF Parser Benchmarks](https://github.com/hamradiolog-net/adif-benchmark) project for benchmarks.
 
-| Benchmark  (AMD Ryzen 9 7950X)             | Iterations | Time/op (ns) | Bytes/op    | Allocs/op   |
-|--------------------------------------------|----------:|---------------:|------------:|-----------:|
-| ▲ Higher is better / ▼ Lower is better     |         ▲ |              ▼ |           ▼ |          ▼ |
-| **Read Operations**                        |           |                |             |            |
-| This Library                               | **1,461** |    **819,922** |   673,421   | **8,757**  |
-| JSON                                       |     622   |    1,915,720   | **402,803** |   25,601   |
-| Matir                                      |     417   |    2,895,274   | 2,037,004   |   66,535   |
-| Eminlin                                    |      68   |   16,453,839   |13,127,877   |  193,083   |
-| **Write Operations**                       |           |                |             |            |
-| This Library                               | **1,800** |    **666,157** | **514,418** |     **20** |
-| JSON                                       |     796   |    1,488,265   |   966,487   |   17,805   |
-| Matir                                      |     399   |    2,994,459   | 1,490,840   |   28,673   |
-| Eminlin                                    |     N/A   |          N/A   |       N/A   |      N/A   |
+## 🔧 Technical Deep Dive (ADI Parser)
 
-## 🔧 Technical Deep Dive
-
-This parser achieves high performance through the following optimizations:
+The ADI parser achieves high performance through the following optimizations:
 
 ### Performance Optimizations
 
@@ -57,9 +44,10 @@ This parser achieves high performance through the following optimizations:
 ### Memory Management
 
 - Zero-copy techniques minimize memory operations
-- String interning of repeated field names greatly reduces allocations and memory use
+- String interning of repeated field names greatly reduces both allocations and memory use
 - Minimal temporary allocations during field parsing
 - Dynamic buffer sizing based on learned field counts
+- Buffer pooling
 
 ## Related Projects
 
