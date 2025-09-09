@@ -2,8 +2,15 @@ package adifield
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/hamradiolog-net/adif-spec/v6/internal/codegen"
 	"github.com/hamradiolog-net/adif-spec/v6/spectype"
+)
+
+var (
+	_ codegen.CodeGenContainer = SpecMapContainer{}
+	_ codegen.CodeGenSpec      = Spec{}
 )
 
 // SpecMapContainer contains all Field specifications as defined by the ADIF Workgroup specification exports.
@@ -25,10 +32,31 @@ type Spec struct {
 	Comments      string           `json:"Comments,omitempty"`
 }
 
-func (s Spec) String() string {
+func (s Spec) CodeGenMetadata() codegen.CodeGenEnumMetadata {
+	var headerOrRecord = "Record"
 	if s.IsHeaderField {
-		return fmt.Sprintf("Header: %s", s.Description)
-	} else {
-		return fmt.Sprintf("Record: %s", s.Description)
+		headerOrRecord = "Header"
+	}
+
+	return codegen.CodeGenEnumMetadata{
+		ConstName:     codegen.ToGoIdentifier(string(s.Key)),
+		ConstValue:    strconv.QuoteToASCII(string(s.Key)),
+		ConstComments: fmt.Sprintf("%s: %s", headerOrRecord, s.Description),
+		IsDeprecated:  bool(s.IsImportOnly),
+	}
+}
+
+func (c SpecMapContainer) CodeGenRecords() map[codegen.CodeGenKey]codegen.CodeGenSpec {
+	result := make(map[codegen.CodeGenKey]codegen.CodeGenSpec, len(c.Records))
+	for k, v := range c.Records {
+		result[k] = v
+	}
+	return result
+}
+
+func (c SpecMapContainer) CodeGenMetadata() codegen.CodeGenContainerMetadata {
+	return codegen.CodeGenContainerMetadata{
+		PackageName: "adifield",
+		DataType:    "ADIField",
 	}
 }

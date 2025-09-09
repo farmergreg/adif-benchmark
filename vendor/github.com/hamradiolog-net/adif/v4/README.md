@@ -52,7 +52,6 @@ This parser achieves high performance through the following optimizations:
 
 - Leverages stdlib I/O operations with SSE/SIMD acceleration depending upon your CPU architecture
 - Smart buffer pre-allocation based on discovered record sizes
-- Optimized ASCII case conversion using bitwise operations
 - Optimized base-10 integer parsing for ADIF field lengths
 
 ### Memory Management

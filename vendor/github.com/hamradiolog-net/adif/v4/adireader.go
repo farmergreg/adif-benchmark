@@ -49,9 +49,8 @@ func NewADIReader(r io.Reader, skipHeader bool) ADIFReader {
 	}
 
 	p := &adiReader{
-		r:                 br,
-		skipHeader:        skipHeader,
-		preAllocateFields: 8,
+		r:          br,
+		skipHeader: skipHeader,
 	}
 	p.appFieldMap = make(map[string]adifield.ADIField, 128)
 
