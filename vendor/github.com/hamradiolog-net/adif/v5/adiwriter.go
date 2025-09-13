@@ -3,7 +3,6 @@ package adif
 import (
 	"io"
 	"math"
-	"slices"
 	"strconv"
 	"sync"
 
@@ -126,23 +125,21 @@ func (w *adiWriter) writeInternal(r ADIFRecord) error {
 // You should use appendAsADIPreCalculate() to determine the required buffer capacity.
 // Field order is NOT guaranteed to be stable.
 func appendAsADI(r ADIFRecord, buf []byte) []byte {
-	if len(r.Fields()) == 0 {
+	if r.Count() == 0 {
 		return buf
 	}
 
 	// Priority fields first (in order, but nothing about this is guaranteed to be stable between versions of this library)
 	for _, field := range adiWriterPriorityFieldOrder {
-		buf = appendADIFRecordAsADI(r, buf, field)
+		buf = appendADIFRecordAsADI(buf, field, r.Get(field))
 	}
 
 	// Remaining fields
-	fields := r.Fields()
-	slices.Sort(fields)
-	for _, field := range fields {
+	for field, value := range r.All() {
 		if _, isPriority := adiWriterPriorityFieldMap[field]; isPriority {
 			continue
 		}
-		buf = appendADIFRecordAsADI(r, buf, field)
+		buf = appendADIFRecordAsADI(buf, field, value)
 	}
 
 	if r.IsHeader() {
@@ -155,26 +152,23 @@ func appendAsADI(r ADIFRecord, buf []byte) []byte {
 }
 
 // appendADIFRecordAsADI adds a single ADIF field to the buffer
-func appendADIFRecordAsADI(r ADIFRecord, buf []byte, field adifield.ADIField) []byte {
-	value := r.Get(field)
+func appendADIFRecordAsADI(buf []byte, field adifield.ADIField, value string) []byte {
 	if value == "" {
 		return buf
 	}
-
 	buf = append(buf, '<')
 	buf = append(buf, field...)
 	buf = append(buf, ':')
 	buf = strconv.AppendInt(buf, int64(len(value)), 10)
 	buf = append(buf, '>')
 	buf = append(buf, value...)
-
 	return buf
 }
 
 // appendADIFRecordAsADIPreCalculate returns the length of the record in bytes when exported to ADI format by the AppendAsADI method.
 func appendADIFRecordAsADIPreCalculate(r ADIFRecord) (adiLength int) {
-	for _, field := range r.Fields() {
-		valueLength := len(r.Get(field))
+	for field, value := range r.All() {
+		valueLength := len(value)
 		if valueLength == 0 {
 			continue
 		}

@@ -4,14 +4,15 @@ import "github.com/hamradiolog-net/spec/v6/adifield"
 
 // ADIFRecord represents a single ADIF record, which may be either a header or a QSO record.
 type ADIFRecord interface {
-	IsHeader() bool                            // IsHeader returns true if the record is a header record.
-	SetIsHeader(isHeader bool)                 // SetIsHeader sets whether the record is a header record.
-	Get(field adifield.ADIField) string        // Get returns the value for the specified field, or an empty string if the field is not present.
-	Set(field adifield.ADIField, value string) // Set sets the value for the specified field.
-	Fields() []adifield.ADIField               // Fields returns a slice of all field available in the record.
+	IsHeader() bool                                  // IsHeader returns true if the record is a header record.
+	SetIsHeader(isHeader bool)                       // SetIsHeader sets whether the record is a header record.
+	Get(field adifield.ADIField) string              // Get is case-insensitive. It returns the value for the specified field, or an empty string if the field is not present.
+	Set(field adifield.ADIField, value string)       // Set sets the value for the specified field.
+	All() func(func(adifield.ADIField, string) bool) // All returns an iterator that yields field-value pairs for all fields in the record.
+	Count() int                                      // Count returns the number of fields in the record.
 }
 
-// ADIFRecordReader processes Amateur Data Interchange Format (ADIF) records sequentially.
+// ADIFRecordReader reads Amateur Data Interchange Format (ADIF) records sequentially.
 type ADIFRecordReader interface {
 
 	// Next reads and returns the next Record in the input.

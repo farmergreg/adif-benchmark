@@ -42,8 +42,7 @@ func (aw *jsonWriter) Write(records []ADIFRecord) error {
 
 func adijRecordToMap(record ADIFRecord) map[adifield.ADIField]string {
 	result := make(map[adifield.ADIField]string)
-	for _, field := range record.Fields() {
-		value := record.Get(field)
+	for field, value := range record.All() {
 		if value != "" {
 			result[field] = value
 		}

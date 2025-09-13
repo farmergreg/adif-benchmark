@@ -66,40 +66,32 @@ func (p *adiReader) Next() (ADIFRecord, error) {
 		// Find the start of the next adi field
 		err := p.discardUntilLessThan()
 		if err != nil {
-			return result, err
+			return nil, err
 		}
 
 		field, value, err := p.parseOneField()
 		if err != nil {
-			return result, err
+			return nil, err
 		}
 
 		switch field {
-		case adifield.EOH:
-			if len(result.r) > 0 {
-				if !p.skipHeader {
-					result.isHeader = true
-					return result, nil
-				}
-
-				// we are skipping returning the EOH record (if any)
-				// reset to prepare to read the next record
-				clear(result.r)
-			}
-			continue
 		case adifield.EOR:
-			if len(result.r) > 0 {
-				if len(result.r) > p.preAllocateFields {
-					p.preAllocateFields = len(result.r)
-				}
+			if count := result.Count(); count > p.preAllocateFields {
+				p.preAllocateFields = count
+			}
+			return result, nil
+		case adifield.EOH:
+			if !p.skipHeader {
+				result.SetIsHeader(true)
 				return result, nil
 			}
-			// we know record is empty... no need to reset it
-			continue
+			// we are skipping returning the EOH record (if any)
+			// reset to prepare to read the next record
+			result.reset()
 		}
 
 		// n.b. if a duplicate field is found, it will replace the previous value
-		result.r[field] = value
+		result.setInternal(field, value)
 	}
 }
 
@@ -108,7 +100,7 @@ func (p *adiReader) Next() (ADIFRecord, error) {
 // It is heavily optimized for speed and memory use.
 // Currently, It can tripple the speed of go's stdlib JSON marshaling for similar data.
 func (p *adiReader) parseOneField() (field adifield.ADIField, value string, err error) {
-	// Step 1: Read in the entire data specifier "<fieldname:length:...>" and remove the trailing '>'
+	// Step 1: Finish reading the data specifier "<fieldname:length:...>", removing the trailing '>'
 	volatileSpecifier, err := p.readDataSpecifierVolatile()
 	if err != nil {
 		return "", "", err
@@ -120,55 +112,49 @@ func (p *adiReader) parseOneField() (field adifield.ADIField, value string, err 
 		return "", "", ErrAdiReaderMalformedADI // field name is empty
 	}
 
-	// Step 2.1: field name string interning - reduce memory allocations
+	// Step 2.1: field name string interning
 	var ok bool
 	fieldStringUnsafe := unsafe.String(&volatileField[0], len(volatileField))
 	if field, ok = p.appFieldMap[fieldStringUnsafe]; !ok {
 		fieldStringSafe := strings.Clone(fieldStringUnsafe)
 		field = adifield.ADIField(strings.ToUpper(fieldStringSafe))
-
-		// The key is the original, non-forced-uppercase value because we assume we'll see it repeatedly.
-		// It will always need the same transformation (if any) applied.
 		p.appFieldMap[fieldStringSafe] = field
 	}
 
+	if !foundFirstColon {
+		// EOH, EOR
+		// And, also, LoTW's deviation from the official spec: APP_LOTW_EOF
+		return field, "", nil
+	}
 	// Step 3: Parse Field Length
-	var length int
-	if foundFirstColon {
-		// look for the second colon which if present, indicates an adi optional type
-		endIdx := bytes.IndexByte(volatileLength, ':')
-		if endIdx == -1 {
-			length, err = parseDataLength(volatileLength)
-		} else {
-			// we have a data type indicator.
-			// this parser doesn't support it; ignore it
-			length, err = parseDataLength(volatileLength[:endIdx])
-		}
-		if err != nil {
-			// handle data length parsing errors
-			return field, "", err
-		}
-
-		// Step 4: Read the field value (if any)
-		// ParseDataLength ensures that length is a reasonable value for us.
-		// inlining v.s. a function call gains a tiny, but measurable amount of performance...
-		if length > 0 {
-			if cap(p.bufValue) < length {
-				p.bufValue = make([]byte, length)
-			}
-			p.bufValue = p.bufValue[:length]
-
-			var c int
-			c, err = io.ReadFull(p.r, p.bufValue) // this will overwrite all of the 'volatile' variables (see above)
-			value = string(p.bufValue[:c])
-			if err == io.EOF {
-				return field, value, ErrAdiReaderMalformedADI
-			}
-			return field, value, err
-		}
+	if idx := len(volatileLength) - 2; idx > 0 && volatileLength[idx] == ':' {
+		// We assume that data type indicators are exactly 1 character long.
+		volatileLength = volatileLength[:idx]
 	}
 
-	return field, "", nil
+	length, err := parseDataLength(volatileLength)
+	if err != nil {
+		// handle data length parsing errors
+		return "", "", err
+	}
+	if length < 1 {
+		return field, "", nil
+	}
+
+	// Step 4: Read the field value
+	// ParseDataLength ensures that length is a reasonable value for us.
+	if cap(p.bufValue) < length {
+		p.bufValue = make([]byte, length)
+	}
+	p.bufValue = p.bufValue[:length]
+
+	var c int
+	c, err = io.ReadFull(p.r, p.bufValue) // this will overwrite all of the 'volatile' variables (see above)
+	value = string(p.bufValue[:c])
+	if err == io.EOF {
+		return "", "", ErrAdiReaderMalformedADI
+	}
+	return field, value, nil
 }
 
 // readDataSpecifierVolatile reads and returns the next data specifier as a byte slice, and any error encountered.
@@ -233,12 +219,12 @@ func (p *adiReader) discardUntilLessThan() (err error) {
 // parseDataLength is an optimized replacement for strconv.Atoi.
 func parseDataLength(data []byte) (value int, err error) {
 	if len(data) == 0 {
-		return 0, ErrAdiReaderInvalidFieldLength
+		return 0, ErrAdiReaderMalformedADI
 	}
 
 	for _, b := range data {
 		if b < '0' || b > '9' {
-			return 0, ErrAdiReaderInvalidFieldLength
+			return 0, ErrAdiReaderMalformedADI
 		}
 
 		// Parse digit, avoiding string allocations
@@ -246,9 +232,8 @@ func parseDataLength(data []byte) (value int, err error) {
 
 		// Check for overflow or too big
 		if newVal < value || newVal > maxADIReaderDataSize {
-			return 0, ErrAdiReaderInvalidFieldLength
+			return 0, ErrAdiReaderMalformedADI
 		}
-
 		value = newVal
 	}
 

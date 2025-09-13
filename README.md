@@ -15,20 +15,26 @@ Finally, the results were sorted from fastest to slowest.
 
 ## Read Benchmark
 
-| Library | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-|---------|------------|--------------|---------------|-------------|
-| HamRadioLogDotNet | 2108 ⭐ | 542296 ⭐ | 784000 | 10053 ⭐ |
-| Matir | 910 | 1317076 | 1728733 | 38665 |
-| JSON | 703 | 1737457 | 255230 ⭐ | 25604 |
-| Eminlin | 231 | 5137402 | 4866837 | 93010 |
+cpu: AMD Ryzen 9 7950X 16-Core Processor
+
+ | Library           | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+ |-------------------|------------|--------------|---------------|-------------|
+ | HamRadioLogDotNet | 2120 ⭐    | 543276 ⭐    | 784003        | 10053 ⭐    |
+ | Matir             | 866        | 1355606      | 1728729       | 38665       |
+ | JSON Reference    | 728        | 1636090      | 255182 ⭐     | 25604       |
+ | AdifMultitool     | 540        | 2224955      | 2706391       | 66889       |
+ | Eminlin           | 229        | 5194470      | 4868258       | 93010       |
 
 ## Write Benchmark
 
-| Library | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-|---------|------------|--------------|---------------|-------------|
-| HamRadioLogDotNet | 2659 ⭐ | 422924 ⭐ | 516745 ⭐ | 23 ⭐ |
-| JSON | 1156 | 1035884 | 810801 | 17803 |
-| Matir | 652 | 1809427 | 1490410 | 28673 |
+cpu: AMD Ryzen 9 7950X 16-Core Processor
+
+ | Library           | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+ |-------------------|------------|--------------|---------------|-------------|
+ | HamRadioLogDotNet | 2139 ⭐    | 544235 ⭐    | 573041 ⭐     | 3097 ⭐     |
+ | JSON Reference    | 1143       | 1042073      | 810846        | 17803       |
+ | Matir             | 658        | 1803563      | 1490393       | 28673       |
+ | AdifMultitool     | 582        | 2080151      | 2279132       | 54302       |
 
 **Note:** ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
 
