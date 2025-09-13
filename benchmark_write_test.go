@@ -8,14 +8,16 @@ import (
 	_ "embed"
 
 	matir "github.com/Matir/adifparser"
-	"github.com/hamradiolog-net/adif/v5"
+	multitool "github.com/flwyd/adif-multitool/adif"
+	hrln "github.com/hamradiolog-net/adif/v5"
 )
+
 func BenchmarkWriteHamRadioLogDotNet(b *testing.B) {
 	qsoListNative := loadTestData()
 	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		w := adif.NewADIRecordWriter(&sb)
+		w := hrln.NewADIRecordWriter(&sb)
 		w.Write(qsoListNative)
 		_ = sb.String()
 	}
@@ -40,6 +42,20 @@ func BenchmarkWriteMatir(b *testing.B) {
 			mw.WriteRecord(qso)
 		}
 		_ = sb.String()
+	}
+}
+
+func BenchmarkWriteAdifMultitool(b *testing.B) {
+	p := multitool.NewADIIO()
+	doc, err := p.Read(strings.NewReader(benchmarkFile))
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	for b.Loop() {
+		p = multitool.NewADIIO()
+		var sb strings.Builder
+		p.Write(doc, &sb)
 	}
 }
 
