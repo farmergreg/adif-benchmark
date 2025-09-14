@@ -2,7 +2,7 @@
 
 A test suite to gauge performance of various golang ADIF parsers.
 
-The HamRadioLog.Net parser is 2x - 3x faster than the nearest competitor.
+The HamRadioLog.Net parser is more than 2x faster than the nearest competitor.
 It performs many fewer allocations and uses much less memory as well.
 
 The JSON benchmark compares the golang standard library performance converting to/from a map[string]string of ADIF data.
