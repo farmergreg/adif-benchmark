@@ -14,10 +14,10 @@ import (
 )
 
 func BenchmarkReadHamRadioLogDotNet(b *testing.B) {
-	var qsoList []hrln.ADIFRecord
+	var qsoList []hrln.Record
 
 	for b.Loop() {
-		qsoList = make([]hrln.ADIFRecord, 0, 10000)
+		qsoList = make([]hrln.Record, 0, 10000)
 		p := hrln.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
 		for {
 			q, err := p.Next()

@@ -38,7 +38,7 @@ func NewJSONRecordReader(r io.Reader, skipHeader bool) (*jsonReader, error) {
 
 // Next reads and returns the next Record.
 // It returns io.EOF when no more records are available.
-func (r *jsonReader) Next() (ADIFRecord, error) {
+func (r *jsonReader) Next() (Record, error) {
 	if r.currentIndex >= len(r.document.Records) {
 		return nil, io.EOF
 	}
@@ -59,9 +59,9 @@ func (r *jsonReader) Next() (ADIFRecord, error) {
 	return record, nil
 }
 
-// mapToADIRecord converts a map of ADIField to string into an ADIFRecord
-func (r *jsonReader) mapToADIRecord(fieldMap map[adifield.ADIField]string) ADIFRecord {
-	record := NewADIRecord()
+// mapToADIRecord converts a map of Field to string into an ADIFRecord
+func (r *jsonReader) mapToADIRecord(fieldMap map[adifield.Field]string) Record {
+	record := NewRecord()
 	for field, value := range fieldMap {
 		record.Set(field, value)
 	}

@@ -19,7 +19,7 @@ func NewJSONRecordWriter(w io.Writer) *jsonWriter {
 }
 
 // Write implements ADIFRecordWriter.Write for writing ADIF records in ADIJ format.
-func (aw *jsonWriter) Write(records []ADIFRecord) error {
+func (aw *jsonWriter) Write(records []Record) error {
 	doc := &adifDocument{}
 	if len(records) > 0 && records[0].IsHeader() {
 		doc.Header = adijRecordToMap(records[0])
@@ -40,8 +40,8 @@ func (aw *jsonWriter) Write(records []ADIFRecord) error {
 	return nil
 }
 
-func adijRecordToMap(record ADIFRecord) map[adifield.ADIField]string {
-	result := make(map[adifield.ADIField]string)
+func adijRecordToMap(record Record) map[adifield.Field]string {
+	result := make(map[adifield.Field]string)
 	for field, value := range record.All() {
 		if value != "" {
 			result[field] = value

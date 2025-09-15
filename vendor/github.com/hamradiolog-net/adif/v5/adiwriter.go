@@ -15,7 +15,7 @@ const adiHeaderPreamble = "                    AM✠DG\nK9CTS High Performance A
 
 // adiWriterPriorityFieldOrder defines the order of priority fields when writing ADIF records.
 // These fields are written first, in this order.
-var adiWriterPriorityFieldOrder = [...]adifield.ADIField{
+var adiWriterPriorityFieldOrder = [...]adifield.Field{
 
 	// Minimum "required" fields:
 	// https://www.adif.org/315/ADIF_315_Resources.htm#ADIFImplementationNotesMinimumFields
@@ -46,7 +46,7 @@ var adiWriterPriorityFieldOrder = [...]adifield.ADIField{
 }
 
 // adiWriterPriorityFieldMap is used for quick lookups to determine if a field is a priority field
-var adiWriterPriorityFieldMap = make(map[adifield.ADIField]struct{}, len(adiWriterPriorityFieldOrder))
+var adiWriterPriorityFieldMap = make(map[adifield.Field]struct{}, len(adiWriterPriorityFieldOrder))
 
 func init() {
 	for _, field := range adiWriterPriorityFieldOrder {
@@ -83,7 +83,7 @@ func NewADIRecordWriterWithPreamble(w io.Writer, adiPreamble string) *adiWriter 
 	}
 }
 
-func (w *adiWriter) Write(r []ADIFRecord) error {
+func (w *adiWriter) Write(r []Record) error {
 	if len(r) > 0 && r[0].IsHeader() {
 		if w.headerPreamble == "" {
 			// preamble is mandatory per the ADIF specification.
@@ -102,7 +102,7 @@ func (w *adiWriter) Write(r []ADIFRecord) error {
 	return nil
 }
 
-func (w *adiWriter) writeInternal(r ADIFRecord) error {
+func (w *adiWriter) writeInternal(r Record) error {
 	adiLength := appendADIFRecordAsADIPreCalculate(r)
 	bufPtr := adiWriterBufferPool.Get().(*[]byte)
 	buf := *bufPtr
@@ -124,7 +124,7 @@ func (w *adiWriter) writeInternal(r ADIFRecord) error {
 // The buffer should have sufficient capacity to avoid reallocations.
 // You should use appendAsADIPreCalculate() to determine the required buffer capacity.
 // Field order is NOT guaranteed to be stable.
-func appendAsADI(r ADIFRecord, buf []byte) []byte {
+func appendAsADI(r Record, buf []byte) []byte {
 	if r.Count() == 0 {
 		return buf
 	}
@@ -152,7 +152,7 @@ func appendAsADI(r ADIFRecord, buf []byte) []byte {
 }
 
 // appendADIFRecordAsADI adds a single ADIF field to the buffer
-func appendADIFRecordAsADI(buf []byte, field adifield.ADIField, value string) []byte {
+func appendADIFRecordAsADI(buf []byte, field adifield.Field, value string) []byte {
 	if value == "" {
 		return buf
 	}
@@ -166,7 +166,7 @@ func appendADIFRecordAsADI(buf []byte, field adifield.ADIField, value string) []
 }
 
 // appendADIFRecordAsADIPreCalculate returns the length of the record in bytes when exported to ADI format by the AppendAsADI method.
-func appendADIFRecordAsADIPreCalculate(r ADIFRecord) (adiLength int) {
+func appendADIFRecordAsADIPreCalculate(r Record) (adiLength int) {
 	for field, value := range r.All() {
 		valueLength := len(value)
 		if valueLength == 0 {

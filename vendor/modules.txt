@@ -9,12 +9,13 @@ github.com/Matir/adifparser
 # github.com/flwyd/adif-multitool v0.1.20
 ## explicit; go 1.18
 github.com/flwyd/adif-multitool/adif
-# github.com/hamradiolog-net/adif/v5 v5.0.0-beta.5
+# github.com/hamradiolog-net/adif/v5 v5.0.0-beta.10
 ## explicit; go 1.25
 github.com/hamradiolog-net/adif/v5
-# github.com/hamradiolog-net/spec/v6 v6.0.0-beta.15
+# github.com/hamradiolog-net/spec/v6 v6.0.0-beta.24
 ## explicit; go 1.25
 github.com/hamradiolog-net/spec/v6/adifield
+github.com/hamradiolog-net/spec/v6/aditype
 github.com/hamradiolog-net/spec/v6/internal/codegen
 github.com/hamradiolog-net/spec/v6/spectype
 # golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63

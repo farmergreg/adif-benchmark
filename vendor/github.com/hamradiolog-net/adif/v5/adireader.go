@@ -28,7 +28,7 @@ type adiReader struct {
 	r *bufio.Reader
 
 	// appFieldMap is a map of field names used to reduce allocations via string interning.
-	appFieldMap map[string]adifield.ADIField
+	appFieldMap map[string]adifield.Field
 
 	// bufValue is a reusable buffer used to temporarily store the VALUE of the current field.
 	bufValue []byte
@@ -53,15 +53,16 @@ func NewADIRecordReader(r io.Reader, skipHeader bool) *adiReader {
 		r:          br,
 		skipHeader: skipHeader,
 	}
-	p.appFieldMap = make(map[string]adifield.ADIField, 128)
+	p.appFieldMap = make(map[string]adifield.Field, 128)
+	p.bufValue = make([]byte, 4096)
 
 	return p
 }
 
 // Next reads and returns the next Record.
 // It returns io.EOF when no more records are available.
-func (p *adiReader) Next() (ADIFRecord, error) {
-	result := NewADIRecordWithCapacity(p.preAllocateFields)
+func (p *adiReader) Next() (Record, error) {
+	result := newRecordWithCapacity(p.preAllocateFields)
 	for {
 		// Find the start of the next adi field
 		err := p.discardUntilLessThan()
@@ -99,7 +100,7 @@ func (p *adiReader) Next() (ADIFRecord, error) {
 //
 // It is heavily optimized for speed and memory use.
 // Currently, It can tripple the speed of go's stdlib JSON marshaling for similar data.
-func (p *adiReader) parseOneField() (field adifield.ADIField, value string, err error) {
+func (p *adiReader) parseOneField() (field adifield.Field, value string, err error) {
 	// Step 1: Finish reading the data specifier "<fieldname:length:...>", removing the trailing '>'
 	volatileSpecifier, err := p.readDataSpecifierVolatile()
 	if err != nil {
@@ -117,7 +118,7 @@ func (p *adiReader) parseOneField() (field adifield.ADIField, value string, err 
 	fieldStringUnsafe := unsafe.String(&volatileField[0], len(volatileField))
 	if field, ok = p.appFieldMap[fieldStringUnsafe]; !ok {
 		fieldStringSafe := strings.Clone(fieldStringUnsafe)
-		field = adifield.ADIField(strings.ToUpper(fieldStringSafe))
+		field = adifield.Field(strings.ToUpper(fieldStringSafe))
 		p.appFieldMap[fieldStringSafe] = field
 	}
 
@@ -150,10 +151,10 @@ func (p *adiReader) parseOneField() (field adifield.ADIField, value string, err 
 
 	var c int
 	c, err = io.ReadFull(p.r, p.bufValue) // this will overwrite all of the 'volatile' variables (see above)
-	value = string(p.bufValue[:c])
 	if err == io.EOF {
 		return "", "", ErrAdiReaderMalformedADI
 	}
+	value = string(p.bufValue[:c])
 	return field, value, nil
 }
 
@@ -218,7 +219,9 @@ func (p *adiReader) discardUntilLessThan() (err error) {
 
 // parseDataLength is an optimized replacement for strconv.Atoi.
 func parseDataLength(data []byte) (value int, err error) {
-	if len(data) == 0 {
+	// prevent overflow; int32 max is 2,147,483,647 (10 digits)
+	// we limit ourselves to 1,000,000,000 maximum
+	if count := len(data); count == 0 || count > 10 {
 		return 0, ErrAdiReaderMalformedADI
 	}
 
@@ -226,15 +229,11 @@ func parseDataLength(data []byte) (value int, err error) {
 		if b < '0' || b > '9' {
 			return 0, ErrAdiReaderMalformedADI
 		}
+		value = value*10 + int(b-'0') // Parse digit, avoiding string allocations
+	}
 
-		// Parse digit, avoiding string allocations
-		newVal := value*10 + int(b-'0')
-
-		// Check for overflow or too big
-		if newVal < value || newVal > maxADIReaderDataSize {
-			return 0, ErrAdiReaderMalformedADI
-		}
-		value = newVal
+	if value > maxADIReaderDataSize {
+		return 0, ErrAdiReaderMalformedADI
 	}
 
 	return value, nil

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 mkdir -p coverage
 go test ./... -coverprofile=coverage/coverage.out

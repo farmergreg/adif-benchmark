@@ -26,3 +26,6 @@ go.work.sum
 
 # the code coverage dir
 coverage/
+
+# benchmarking output
+cpu.out

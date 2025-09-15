@@ -17,7 +17,7 @@ func benchmarkFileAsJSON() []byte {
 	var buffer bytes.Buffer
 	src := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
 	dst := adif.NewJSONRecordWriter(&buffer)
-	srcRecords := make([]adif.ADIFRecord, 0, 10000)
+	srcRecords := make([]adif.Record, 0, 10000)
 	for {
 		record, err := src.Next()
 		if err == io.EOF {
@@ -32,8 +32,8 @@ func benchmarkFileAsJSON() []byte {
 	return buffer.Bytes()
 }
 
-func loadTestData() []adif.ADIFRecord {
-	var qsoListNative []adif.ADIFRecord
+func loadTestData() []adif.Record {
+	var qsoListNative []adif.Record
 	p := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
 	for {
 		record, err := p.Next()
