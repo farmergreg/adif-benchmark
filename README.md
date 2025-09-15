@@ -18,25 +18,25 @@ Finally, the results were sorted from fastest to slowest.
 cpu: AMD Ryzen 9 7950X 16-Core Processor
 
  | Library           | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
- |-------------------|------------|--------------|---------------|-------------|
- | HamRadioLogDotNet | 2120 ⭐    | 543276 ⭐    | 784003        | 10053 ⭐    |
- | Matir             | 866        | 1355606      | 1728729       | 38665       |
- | JSON Reference    | 728        | 1636090      | 255182 ⭐     | 25604       |
- | AdifMultitool     | 540        | 2224955      | 2706391       | 66889       |
- | Eminlin           | 229        | 5194470      | 4868258       | 93010       |
+ |-------------------|-----------:|-------------:|--------------:|------------:|
+ | HamRadioLogDotNet |⭐ 2120     |⭐ 543276     |   784003      | ⭐ 10053    |
+ | Matir             |    866     |  1355606     |  1728729      |    38665    |
+ | JSON Reference    |    728     |  1636090     |⭐ 255182      |    25604    |
+ | AdifMultitool     |    540     |  2224955     |  2706391      |    66889    |
+ | Eminlin           |    229     |  5194470     |  4868258      |    93010    |
 
 ## Write Benchmark
 
 cpu: AMD Ryzen 9 7950X 16-Core Processor
 
  | Library           | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
- |-------------------|------------|--------------|---------------|-------------|
- | HamRadioLogDotNet | 2139 ⭐    | 544235 ⭐    | 573041 ⭐     | 3097 ⭐     |
- | JSON Reference    | 1143       | 1042073      | 810846        | 17803       |
- | Matir             | 658        | 1803563      | 1490393       | 28673       |
- | AdifMultitool     | 582        | 2080151      | 2279132       | 54302       |
+ |-------------------|-----------:|-------------:|--------------:|------------:|
+ | HamRadioLogDotNet | ⭐ 2139    |  ⭐ 544235    |  ⭐ 573041   | ⭐ 3097     |
+ | JSON Reference    |    1143    |    1042073    |     810846   |  17803      |
+ | Matir             |     658    |    1803563    |    1490393   |  28673      |
+ | AdifMultitool     |     582    |    2080151    |    2279132   |  54302      |
 
-**Note:** ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
+⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
 
 ## Related Projects
 
