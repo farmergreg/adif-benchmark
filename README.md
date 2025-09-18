@@ -37,5 +37,5 @@ If you found this library useful, you may also be interested in the following pr
 - [Go ADIF Specification](https://github.com/farmergreg/spec)
 - [farmergreg adif](https://github.com/farmergreg/adif)
 - [matir adifparser](https://github.com/Matir/adifparser)
-- [flwyd adif-multitool](https://github.com/flwyd/adif-multitool/adif)
+- [flwyd adif-multitool](https://github.com/flwyd/adif-multitool)
 - [eminlin GoADIFLog](https://github.com/Eminlin/GoADIFLog)
