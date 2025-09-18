@@ -1,36 +1,16 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"strings"
 
 	_ "embed"
 
-	"github.com/hamradiolog-net/adif/v5"
+	"github.com/farmergreg/adif/v5"
 )
 
 //go:embed testdata/N3FJP-AClogAdif.adi
 var benchmarkFile string
-
-func benchmarkFileAsJSON() []byte {
-	var buffer bytes.Buffer
-	src := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
-	dst := adif.NewJSONRecordWriter(&buffer)
-	srcRecords := make([]adif.Record, 0, 10000)
-	for {
-		record, err := src.Next()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			panic(err)
-		}
-		srcRecords = append(srcRecords, record)
-	}
-	dst.Write(srcRecords)
-	return buffer.Bytes()
-}
 
 func loadTestData() []adif.Record {
 	var qsoListNative []adif.Record

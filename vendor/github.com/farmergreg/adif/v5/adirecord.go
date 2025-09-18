@@ -3,7 +3,7 @@ package adif
 import (
 	"slices"
 
-	"github.com/hamradiolog-net/spec/v6/adifield"
+	"github.com/farmergreg/spec/v6/adifield"
 )
 
 var _ Record = (*adiRecord)(nil)
@@ -61,7 +61,7 @@ func (r *adiRecord) Set(field adifield.Field, value string) {
 
 // setInternal sets the value for a field without modifying the field name or clearing the cache.
 // It is used by the parser to avoid unnecessary allocations.
-// It assumes the field name is already normalized (UPPERCASE).
+// It assumes the field name is already normalized (lowercase).
 func (r *adiRecord) setInternal(field adifield.Field, value string) {
 	if value == "" {
 		delete(r.fields, field)

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"io"
 	"strings"
 	"testing"
@@ -10,10 +9,10 @@ import (
 	eminlinformat "github.com/Eminlin/GoADIFLog/format"
 	matir "github.com/Matir/adifparser"
 	multitool "github.com/flwyd/adif-multitool/adif"
-	hrln "github.com/hamradiolog-net/adif/v5"
+	hrln "github.com/farmergreg/adif/v5"
 )
 
-func BenchmarkReadHamRadioLogDotNet(b *testing.B) {
+func BenchmarkReadFarmerGreg(b *testing.B) {
 	var qsoList []hrln.Record
 
 	for b.Loop() {
@@ -81,21 +80,4 @@ func BenchmarkReadEminlin(b *testing.B) {
 		_ = len(log)
 	}
 	_ = len(log)
-}
-
-// This benchmark works directly on JSON data, without using this library for reading the JSON ADIF data.
-// It is meant as a reference point to compare the performance to a known standard (the go stdlib JSON parser).
-func BenchmarkReadJSONReference(b *testing.B) {
-	jsonRecords := benchmarkFileAsJSON()
-
-	b.ResetTimer()
-	document := adifDocument{}
-	for b.Loop() {
-		err := json.Unmarshal(jsonRecords, &document)
-		if err != nil {
-			b.Fatal(err)
-		}
-		_ = len(document.Records)
-	}
-	_ = len(document.Records)
 }

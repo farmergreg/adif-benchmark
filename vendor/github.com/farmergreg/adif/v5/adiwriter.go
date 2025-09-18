@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/hamradiolog-net/spec/v6/adifield"
+	"github.com/farmergreg/spec/v6/adifield"
 )
 
 var _ ADIFRecordWriter = (*adiWriter)(nil)
 
-const adiHeaderPreamble = "                    AM✠DG\nK9CTS High Performance ADIF Processing Library\n   https://github.com/hamradiolog-net/adif\n\n"
+const adiHeaderPreamble = "                    AM✠DG\nK9CTS High Performance ADIF Processing Library\n   https://github.com/farmergreg/adif\n\n"
 
 // adiWriterPriorityFieldOrder defines the order of priority fields when writing ADIF records.
 // These fields are written first, in this order.
@@ -83,8 +83,8 @@ func NewADIRecordWriterWithPreamble(w io.Writer, adiPreamble string) *adiWriter 
 	}
 }
 
-func (w *adiWriter) Write(r []Record) error {
-	if len(r) > 0 && r[0].IsHeader() {
+func (w *adiWriter) Write(r Record) error {
+	if r.IsHeader() {
 		if w.headerPreamble == "" {
 			// preamble is mandatory per the ADIF specification.
 			w.w.Write([]byte{'\n'})
@@ -93,12 +93,11 @@ func (w *adiWriter) Write(r []Record) error {
 		}
 	}
 
-	for _, record := range r {
-		err := w.writeInternal(record)
-		if err != nil {
-			return err
-		}
+	err := w.writeInternal(r)
+	if err != nil {
+		return err
 	}
+
 	return nil
 }
 
@@ -143,9 +142,9 @@ func appendAsADI(r Record, buf []byte) []byte {
 	}
 
 	if r.IsHeader() {
-		buf = append(buf, "<EOH>\n"...)
+		buf = append(buf, "<eoh>\n"...)
 	} else {
-		buf = append(buf, "<EOR>\n"...)
+		buf = append(buf, "<eor>\n"...)
 	}
 
 	return buf
@@ -191,5 +190,5 @@ func appendADIFRecordAsADIPreCalculate(r Record) (adiLength int) {
 		}
 	}
 
-	return adiLength + 6 // "<EOR>\n" / "<EOH>\n"
+	return adiLength + 6 // "<eor>\n" / "<eoh>\n"
 }

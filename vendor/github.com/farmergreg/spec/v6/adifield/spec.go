@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hamradiolog-net/spec/v6/aditype"
-	"github.com/hamradiolog-net/spec/v6/internal/codegen"
-	"github.com/hamradiolog-net/spec/v6/spectype"
+	"github.com/farmergreg/spec/v6/aditype"
+	"github.com/farmergreg/spec/v6/internal/codegen"
+	"github.com/farmergreg/spec/v6/spectype"
 )
 
 var (
@@ -51,7 +51,7 @@ func (s Spec) CodeGenMetadata() codegen.CodeGenEnumMetadata {
 func (c SpecMapContainer) CodeGenRecords() map[codegen.CodeGenKey]codegen.CodeGenSpec {
 	result := make(map[codegen.CodeGenKey]codegen.CodeGenSpec, len(c.Records))
 	for k, v := range c.Records {
-		v.Key = Field(strings.ToUpper(string(v.Key)))
+		v.Key = Field(strings.ToLower(string(v.Key)))
 		v.DataType = aditype.New(string(v.DataType))
 		result[k] = v
 	}

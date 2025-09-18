@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/hamradiolog-net/spec/v6/adifield"
+	"github.com/farmergreg/spec/v6/adifield"
 )
 
 var _ ADIFRecordReader = (*adiReader)(nil)
@@ -118,7 +118,7 @@ func (p *adiReader) parseOneField() (field adifield.Field, value string, err err
 	fieldStringUnsafe := unsafe.String(&volatileField[0], len(volatileField))
 	if field, ok = p.appFieldMap[fieldStringUnsafe]; !ok {
 		fieldStringSafe := strings.Clone(fieldStringUnsafe)
-		field = adifield.Field(strings.ToUpper(fieldStringSafe))
+		field = adifield.New(fieldStringSafe)
 		p.appFieldMap[fieldStringSafe] = field
 	}
 

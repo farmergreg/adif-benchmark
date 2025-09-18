@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -9,16 +8,21 @@ import (
 
 	matir "github.com/Matir/adifparser"
 	multitool "github.com/flwyd/adif-multitool/adif"
-	hrln "github.com/hamradiolog-net/adif/v5"
+	farmergreg "github.com/farmergreg/adif/v5"
 )
 
-func BenchmarkWriteHamRadioLogDotNet(b *testing.B) {
+func BenchmarkWriteFarmerGreg(b *testing.B) {
 	qsoListNative := loadTestData()
 	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		w := hrln.NewADIRecordWriter(&sb)
-		w.Write(qsoListNative)
+		w := farmergreg.NewADIRecordWriter(&sb)
+		for _, qso := range qsoListNative {
+			err := w.Write(qso)
+			if err != nil {
+				b.Fatal(err)
+			}
+		}
 		_ = sb.String()
 	}
 }
@@ -64,20 +68,3 @@ func BenchmarkWriteAdifMultitool(b *testing.B) {
 func BenchmarkWriteEminlin(b *testing.B) {
 }
 */
-
-func BenchmarkWriteJSONReference(b *testing.B) {
-	jsonRecords := benchmarkFileAsJSON()
-	document := adifDocument{}
-	err := json.Unmarshal(jsonRecords, &document)
-	if err != nil {
-		b.Fatal(err)
-	}
-
-	b.ResetTimer()
-	for b.Loop() {
-		_, err := json.Marshal(document)
-		if err != nil {
-			panic(err)
-		}
-	}
-}

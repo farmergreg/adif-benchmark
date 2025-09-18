@@ -6,18 +6,18 @@ github.com/Eminlin/GoADIFLog/tools
 # github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437
 ## explicit; go 1.11
 github.com/Matir/adifparser
+# github.com/farmergreg/adif/v5 v5.0.0-beta.13
+## explicit; go 1.25
+github.com/farmergreg/adif/v5
+# github.com/farmergreg/spec/v6 v6.0.0-beta.27
+## explicit; go 1.25
+github.com/farmergreg/spec/v6/adifield
+github.com/farmergreg/spec/v6/aditype
+github.com/farmergreg/spec/v6/internal/codegen
+github.com/farmergreg/spec/v6/spectype
 # github.com/flwyd/adif-multitool v0.1.20
 ## explicit; go 1.18
 github.com/flwyd/adif-multitool/adif
-# github.com/hamradiolog-net/adif/v5 v5.0.0-beta.10
-## explicit; go 1.25
-github.com/hamradiolog-net/adif/v5
-# github.com/hamradiolog-net/spec/v6 v6.0.0-beta.24
-## explicit; go 1.25
-github.com/hamradiolog-net/spec/v6/adifield
-github.com/hamradiolog-net/spec/v6/aditype
-github.com/hamradiolog-net/spec/v6/internal/codegen
-github.com/hamradiolog-net/spec/v6/spectype
 # golang.org/x/exp v0.0.0-20230817173708-d852ddb80c63
 ## explicit; go 1.20
 golang.org/x/exp/constraints
