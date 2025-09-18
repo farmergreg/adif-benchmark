@@ -8,7 +8,7 @@ import (
 	eminlin "github.com/Eminlin/GoADIFLog"
 	eminlinformat "github.com/Eminlin/GoADIFLog/format"
 	matir "github.com/Matir/adifparser"
-	multitool "github.com/flwyd/adif-multitool/adif"
+	flwyd "github.com/flwyd/adif-multitool/adif"
 	hrln "github.com/farmergreg/adif/v5"
 )
 
@@ -53,12 +53,12 @@ func BenchmarkReadMatir(b *testing.B) {
 	_ = len(qsoList)
 }
 
-func BenchmarkReadAdifMultitool(b *testing.B) {
-	var log *multitool.Logfile
+func BenchmarkReadFLWYD(b *testing.B) {
+	var log *flwyd.Logfile
 	var err error
 
 	for b.Loop() {
-		p := multitool.NewADIIO()
+		p := flwyd.NewADIIO()
 		log, err = p.Read(strings.NewReader(benchmarkFile))
 		if err != nil {
 			b.Fatal(err)

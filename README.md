@@ -11,22 +11,22 @@ Finally, the results were sorted from fastest to slowest.
 
 cpu: AMD Ryzen 9 7950X 16-Core Processor
 
-  | Library       | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-  |---------------|-----------:|-------------:|--------------:|------------:|
-  | FarmerGreg    | ⭐ 2286    | ⭐ 505201    | ⭐ 788137     | ⭐ 10059    |
-  | Matir         | 946        | 1284393      | 1728723       | 38665       |
-  | AdifMultitool | 576        | 2083204      | 2706394       | 66889       |
-  | Eminlin       | 240        | 4913100      | 4870373       | 93010       |
+   | Library    | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+   |------------|-----------:|-------------:|--------------:|------------:|
+   | farmergreg | ⭐ 2286    | ⭐ 505201    | ⭐ 788137     | ⭐ 10059  |
+   | matir      | 946        | 1284393      | 1728723       | 38665       |
+   | flwyd      | 576        | 2083204      | 2706394       | 66889       |
+   | eminlin    | 240        | 4913100      | 4870373       | 93010       |
 
 ## Write Benchmark
 
 cpu: AMD Ryzen 9 7950X 16-Core Processor
 
-  | Library       | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-  |---------------|-----------:|-------------:|--------------:|------------:|
-  | FarmerGreg    | ⭐ 2414    | ⭐ 468399    | ⭐ 573035     | ⭐ 3096     |
-  | Matir         | 669        | 1770059      | 1490438       | 28673       |
-  | AdifMultitool | 621        | 1922917      | 2279068       | 54302       |
+   | Library    | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+   |------------|-----------:|-------------:|--------------:|------------:|
+   | farmergreg | ⭐ 2414    | ⭐ 468399    | ⭐ 573035     | ⭐ 3096   |
+   | matir      | 669        | 1770059      | 1490438       | 28673       |
+   | flwyd      | 621        | 1922917      | 2279068       | 54302       |
 
 ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
 
@@ -34,5 +34,8 @@ cpu: AMD Ryzen 9 7950X 16-Core Processor
 
 If you found this library useful, you may also be interested in the following projects:
 
-- [World's Fastest ADIF Parser](https://github.com/farmergreg/adif)
 - [Go ADIF Specification](https://github.com/farmergreg/spec)
+- [farmergreg adif](https://github.com/farmergreg/adif)
+- [matir adifparser](https://github.com/Matir/adifparser)
+- [flwyd adif-multitool](https://github.com/flwyd/adif-multitool/adif)
+- [eminlin GoADIFLog](https://github.com/Eminlin/GoADIFLog)

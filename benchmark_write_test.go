@@ -7,7 +7,7 @@ import (
 	_ "embed"
 
 	matir "github.com/Matir/adifparser"
-	multitool "github.com/flwyd/adif-multitool/adif"
+	flwyd "github.com/flwyd/adif-multitool/adif"
 	farmergreg "github.com/farmergreg/adif/v5"
 )
 
@@ -49,15 +49,15 @@ func BenchmarkWriteMatir(b *testing.B) {
 	}
 }
 
-func BenchmarkWriteAdifMultitool(b *testing.B) {
-	p := multitool.NewADIIO()
+func BenchmarkWriteFLWYD(b *testing.B) {
+	p := flwyd.NewADIIO()
 	doc, err := p.Read(strings.NewReader(benchmarkFile))
 	if err != nil {
 		b.Fatal(err)
 	}
 
 	for b.Loop() {
-		p = multitool.NewADIIO()
+		p = flwyd.NewADIIO()
 		var sb strings.Builder
 		p.Write(doc, &sb)
 	}
