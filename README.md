@@ -12,27 +12,27 @@ The same data in JSON format is also benchmarked with the Go standard library to
 
 cpu: AMD Ryzen 9 7950X 16-Core Processor
 
-    | Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-    |-----------------|-----------:|-------------:|--------------:|------------:|
-    | farmergreg ADI  | ⭐ 2091    | ⭐ 544733    | ⭐ 781091     | ⭐ 10059  |
-    | Go Std Lib JSON | 636        | 1858340      | 777888        | 25617       |
-    | matir ADI       | 850        | 1393314      | 1728728       | 38665       |
-    | flwyd ADI       | 534        | 2282365      | 2706391       | 66889       |
-    | eminlin ADI     | 222        | 5345511      | 4871133       | 93010       |
-    | farmergreg JSON | 403        | 2935292      | 2835496       | 32201       |
+| Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+|-----------------|-----------:|-------------:|--------------:|------------:|
+| farmergreg ADI  | ⭐ 2091    | ⭐ 544733    | ⭐ 781091     | ⭐ 10059  |
+| Go Std Lib JSON | 636        | 1858340      | 777888        | 25617       |
+| matir ADI       | 850        | 1393314      | 1728728       | 38665       |
+| flwyd ADI       | 534        | 2282365      | 2706391       | 66889       |
+| eminlin ADI     | 222        | 5345511      | 4871133       | 93010       |
+| farmergreg JSON | 403        | 2935292      | 2835496       | 32201       |
 
 ## Write Benchmark
 
 cpu: AMD Ryzen 9 7950X 16-Core Processor
 
-    | Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-    |-----------------|-----------:|-------------:|--------------:|------------:|
-    | farmergreg ADI  | ⭐ 2239    | ⭐ 503240    | ⭐ 570984     | ⭐ 3094   |
-    | Go Std Lib JSON | 1081       | 1076449      | 813417        | 17804       |
-    | farmergreg JSON | 649        | 1833757      | 1873563       | 22207       |
-    | matir ADI       | 607        | 1954607      | 1490464       | 28673       |
-    | flwyd ADI       | 534        | 2262501      | 2279064       | 54302       |
-    | eminlin ADI     | N/A        | N/A          | N/A           | N/A         |
+| Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+|-----------------|-----------:|-------------:|--------------:|------------:|
+| farmergreg ADI  | ⭐ 2239    | ⭐ 503240    | ⭐ 570984     | ⭐ 3094   |
+| Go Std Lib JSON | 1081       | 1076449      | 813417        | 17804       |
+| farmergreg JSON | 649        | 1833757      | 1873563       | 22207       |
+| matir ADI       | 607        | 1954607      | 1490464       | 28673       |
+| flwyd ADI       | 534        | 2262501      | 2279064       | 54302       |
+| eminlin ADI     | N/A        | N/A          | N/A           | N/A         |
 
 ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
 
