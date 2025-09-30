@@ -9,17 +9,17 @@ import (
 	eminlinformat "github.com/Eminlin/GoADIFLog/format"
 	matir "github.com/Matir/adifparser"
 	flwyd "github.com/flwyd/adif-multitool/adif"
-	hrln "github.com/farmergreg/adif/v5"
+	farmergreg "github.com/farmergreg/adif/v5"
 )
 
 func BenchmarkReadFarmerGreg(b *testing.B) {
-	var qsoList []hrln.Record
+	var qsoList []farmergreg.Record
 
 	for b.Loop() {
-		qsoList = make([]hrln.Record, 0, 10000)
-		p := hrln.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
+		qsoList = make([]farmergreg.Record, 0, 10000)
+		p := farmergreg.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
 		for {
-			q, err := p.Next()
+			q, _, err := p.Next()
 			if err == io.EOF {
 				break
 			}

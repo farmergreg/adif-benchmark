@@ -18,7 +18,7 @@ func BenchmarkWriteFarmerGreg(b *testing.B) {
 		var sb strings.Builder
 		w := farmergreg.NewADIRecordWriter(&sb)
 		for _, qso := range qsoListNative {
-			err := w.Write(qso)
+			err := w.Write(qso, false)
 			if err != nil {
 				b.Fatal(err)
 			}

@@ -8,4 +8,7 @@ var (
 
 	// ErrAdiReaderNilReader is returned when the reader passed to NewADIRecordReader is nil.
 	ErrAdiWriterNilWriter = errors.New("adi writer: nil writer")
+
+	// ErrHeaderAlreadyWritten is returned when attempting to write more than one header record.
+	ErrHeaderAlreadyWritten = errors.New("header record already written")
 )

@@ -9,10 +9,10 @@ import (
 var _ Record = (*adiRecord)(nil)
 
 // adiRecord represents a single ADI record.
+// It may be either a Header, or a QSO.
 type adiRecord struct {
-	fields   map[adifield.Field]string // map of all fields and their values
+	Fields   map[adifield.Field]string // map of all fields and their values
 	allCache []adifield.Field          // all sorts the keys prior to iterating, this caches that work
-	isHeader bool                      // true if this record is a header
 }
 
 // NewRecord creates a new adiRecord with the default initial capacity.
@@ -26,31 +26,20 @@ func newRecordWithCapacity(initialCapacity int) *adiRecord {
 		initialCapacity = 7
 	}
 	r := adiRecord{
-		fields: make(map[adifield.Field]string, initialCapacity),
+		Fields: make(map[adifield.Field]string, initialCapacity),
 	}
 	return &r
 }
 
 // reset clears the record for reuse.
 func (r *adiRecord) reset() {
-	clear(r.fields)
+	clear(r.Fields)
 	r.allCache = r.allCache[:0]
-	r.isHeader = false
-}
-
-// IsHeader implements ADIFRecord.IsHeader
-func (r *adiRecord) IsHeader() bool {
-	return r.isHeader
-}
-
-// SetIsHeader implements ADIFRecord.SetIsHeader
-func (r *adiRecord) SetIsHeader(isHeader bool) {
-	r.isHeader = isHeader
 }
 
 // Get implements ADIFRecord.Get
 func (r *adiRecord) Get(field adifield.Field) string {
-	return r.fields[field]
+	return r.Fields[field]
 }
 
 // Set implements ADIFRecord.Set
@@ -64,17 +53,17 @@ func (r *adiRecord) Set(field adifield.Field, value string) {
 // It assumes the field name is already normalized (lowercase).
 func (r *adiRecord) setInternal(field adifield.Field, value string) {
 	if value == "" {
-		delete(r.fields, field)
+		delete(r.Fields, field)
 	} else {
-		r.fields[field] = value
+		r.Fields[field] = value
 	}
 }
 
 // All implements ADIFRecord.All
 func (r *adiRecord) All() func(func(adifield.Field, string) bool) {
 	if r.allCache == nil {
-		r.allCache = make([]adifield.Field, 0, len(r.fields))
-		for field := range r.fields {
+		r.allCache = make([]adifield.Field, 0, len(r.Fields))
+		for field := range r.Fields {
 			r.allCache = append(r.allCache, field)
 		}
 		slices.Sort(r.allCache)
@@ -82,7 +71,7 @@ func (r *adiRecord) All() func(func(adifield.Field, string) bool) {
 
 	return func(yield func(adifield.Field, string) bool) {
 		for _, field := range r.allCache {
-			if !yield(field, r.fields[field]) {
+			if !yield(field, r.Fields[field]) {
 				return
 			}
 		}
@@ -91,5 +80,5 @@ func (r *adiRecord) All() func(func(adifield.Field, string) bool) {
 
 // Count implements ADIFRecord.Count
 func (r *adiRecord) Count() int {
-	return len(r.fields)
+	return len(r.Fields)
 }

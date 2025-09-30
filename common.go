@@ -16,7 +16,7 @@ func loadTestData() []adif.Record {
 	var qsoListNative []adif.Record
 	p := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
 	for {
-		record, err := p.Next()
+		record, _, err := p.Next()
 		if err == io.EOF {
 			break
 		}
@@ -30,9 +30,9 @@ func loadTestData() []adif.Record {
 type adifDocument struct {
 	// Header is nil when there is no header.
 	// Otherwise it is a Record with header fields inside.
-	Header map[string]string `json:"HEADER,omitempty"`
+	Header map[string]string `json:"header,omitempty"`
 
 	// Records is a slice of Record.
 	// It contains zero or more QSO records.
-	Records []map[string]string `json:"RECORDS"`
+	Records []map[string]string `json:"records"`
 }

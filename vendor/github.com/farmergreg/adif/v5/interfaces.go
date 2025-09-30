@@ -1,13 +1,12 @@
 package adif
 
-import "github.com/farmergreg/spec/v6/adifield"
+import (
+	"github.com/farmergreg/spec/v6/adifield"
+)
 
 // Record represents a single ADIF record.
 // It may be either a Header, or a QSO.
 type Record interface {
-	IsHeader() bool            // IsHeader returns true if the record is a header record.
-	SetIsHeader(isHeader bool) // SetIsHeader sets whether the record is a header record.
-
 	Get(field adifield.Field) string        // Get returns the value for the specified field, or an empty string if the field is not present.
 	Set(field adifield.Field, value string) // Set sets the value for the specified field.
 
@@ -15,16 +14,26 @@ type Record interface {
 	Count() int                                   // Count returns the number of fields in the record.
 }
 
-// ADIFRecordReader reads Amateur Data Interchange Format (ADIF) records sequentially.
-type ADIFRecordReader interface {
+// RecordReader reads Amateur Data Interchange Format (ADIF) records sequentially.
+type RecordReader interface {
 
 	// Next reads and returns the next Record in the input.
 	// It returns io.EOF when no more records are available.
-	Next() (record Record, err error)
+	// isHeader indicates if the record is a header record.
+	Next() (record Record, isHeader bool, err error)
 }
 
-// ADIFRecordWriter writes Amateur Data Interchange Format (ADIF) records sequentially.
-type ADIFRecordWriter interface {
+// RecordWriter writes Amateur Data Interchange Format (ADIF) records sequentially.
+type RecordWriter interface {
 	// Write writes ADIF record(s) to the output.
-	Write(record Record) error
+	// isHeader indicates if the record is a header record.
+	// When writing a header record, it MUST be the first record written.
+	Write(record Record, isHeader bool) error
+}
+
+// RecordWriteFlusher writes Amateur Data Interchange Format (ADIF) records sequentially.
+// When all records are written, Close() MUST be called.
+type RecordWriteFlusher interface {
+	RecordWriter
+	Flush() error // Flush flushes buffered data to the underlying writer.
 }

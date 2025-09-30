@@ -9,7 +9,7 @@ import (
 	"github.com/farmergreg/spec/v6/adifield"
 )
 
-var _ ADIFRecordWriter = (*adiWriter)(nil)
+var _ RecordWriter = (*adiWriter)(nil)
 
 const adiHeaderPreamble = "                    AM✠DG\nK9CTS High Performance ADIF Processing Library\n   https://github.com/farmergreg/adif\n\n"
 
@@ -71,20 +71,20 @@ var adiWriterBufferPool = sync.Pool{
 }
 
 // NewADIRecordWriter returns an ADIFRecordWriter that can write ADIF *.adi formatted records.
-func NewADIRecordWriter(w io.Writer) *adiWriter {
+func NewADIRecordWriter(w io.Writer) RecordWriter {
 	return NewADIRecordWriterWithPreamble(w, adiHeaderPreamble)
 }
 
 // NewADIRecordWriterWithPreamble returns an ADIFRecordWriter that can write ADIF *.adi formatted records with a custom preamble for header records.
-func NewADIRecordWriterWithPreamble(w io.Writer, adiPreamble string) *adiWriter {
+func NewADIRecordWriterWithPreamble(w io.Writer, adiPreamble string) RecordWriter {
 	return &adiWriter{
 		w:              w,
 		headerPreamble: adiPreamble,
 	}
 }
 
-func (w *adiWriter) Write(r Record) error {
-	if r.IsHeader() {
+func (w *adiWriter) Write(r Record, isHeader bool) error {
+	if isHeader {
 		if w.headerPreamble == "" {
 			// preamble is mandatory per the ADIF specification.
 			w.w.Write([]byte{'\n'})
@@ -93,7 +93,7 @@ func (w *adiWriter) Write(r Record) error {
 		}
 	}
 
-	err := w.writeInternal(r)
+	err := w.writeInternal(r, isHeader)
 	if err != nil {
 		return err
 	}
@@ -101,7 +101,7 @@ func (w *adiWriter) Write(r Record) error {
 	return nil
 }
 
-func (w *adiWriter) writeInternal(r Record) error {
+func (w *adiWriter) writeInternal(r Record, isHeader bool) error {
 	adiLength := appendADIFRecordAsADIPreCalculate(r)
 	bufPtr := adiWriterBufferPool.Get().(*[]byte)
 	buf := *bufPtr
@@ -112,7 +112,7 @@ func (w *adiWriter) writeInternal(r Record) error {
 	}
 	buf = buf[:0]
 
-	buf = appendAsADI(r, buf)
+	buf = appendAsADI(r, isHeader, buf)
 	_, err := w.w.Write(buf)
 
 	adiWriterBufferPool.Put(bufPtr)
@@ -123,7 +123,7 @@ func (w *adiWriter) writeInternal(r Record) error {
 // The buffer should have sufficient capacity to avoid reallocations.
 // You should use appendAsADIPreCalculate() to determine the required buffer capacity.
 // Field order is NOT guaranteed to be stable.
-func appendAsADI(r Record, buf []byte) []byte {
+func appendAsADI(r Record, isHeader bool, buf []byte) []byte {
 	if r.Count() == 0 {
 		return buf
 	}
@@ -141,7 +141,7 @@ func appendAsADI(r Record, buf []byte) []byte {
 		buf = appendADIFRecordAsADI(buf, field, value)
 	}
 
-	if r.IsHeader() {
+	if isHeader {
 		buf = append(buf, "<eoh>\n"...)
 	} else {
 		buf = append(buf, "<eor>\n"...)
@@ -164,7 +164,7 @@ func appendADIFRecordAsADI(buf []byte, field adifield.Field, value string) []byt
 	return buf
 }
 
-// appendADIFRecordAsADIPreCalculate returns the length of the record in bytes when exported to ADI format by the AppendAsADI method.
+// appendADIFRecordAsADIPreCalculate returns the length of the record in bytes when exported to ADI format by the appendAsADI method.
 func appendADIFRecordAsADIPreCalculate(r Record) (adiLength int) {
 	for field, value := range r.All() {
 		valueLength := len(value)

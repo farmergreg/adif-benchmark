@@ -14,16 +14,17 @@ It's idiomatic, developer-friendly API seamlessly integrates with your codebase 
 - 🔧 **Developer Friendly**: Clean, idiomatic, mock friendly interfaces
 - 🚀 **Blazing Fast**: 2x-20x faster than other ADI libraries
 - 💡 **Memory Efficient**: Uses 2x less memory and makes 1400x fewer allocations than other libraries.
-- 🔬 **Tested**: This library has 100% test coverage!
+- 🔬 **Tested**: 100% test coverage!
 
 ## 🚀 Quick Start
 
 ```bash
-go get github.com/farmergreg/adif@latest
+go get github.com/farmergreg/adif/v5
 ```
 
-1) [Example Processing ADI Files](./example_test.go): If you're not sure, use this!
+1) [ADI Processing Example](./example_adi_test.go)
 2) ADX XML Processing: Not implemented. PR(s) welcome!
+3) [JSON Processing Example](./example_json_test.go): Experimental. Not optimized; not part of the ADIF Specification.
 
 ## Benchmarks
 

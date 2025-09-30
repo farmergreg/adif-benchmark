@@ -10,7 +10,7 @@ import (
 	"github.com/farmergreg/spec/v6/adifield"
 )
 
-var _ ADIFRecordReader = (*adiReader)(nil)
+var _ RecordReader = (*adiReader)(nil)
 
 const (
 	// 1MB - this is the maximum size of a field value that we will accept.
@@ -61,18 +61,18 @@ func NewADIRecordReader(r io.Reader, skipHeader bool) *adiReader {
 
 // Next reads and returns the next Record.
 // It returns io.EOF when no more records are available.
-func (p *adiReader) Next() (Record, error) {
+func (p *adiReader) Next() (Record, bool, error) {
 	result := newRecordWithCapacity(p.preAllocateFields)
 	for {
 		// Find the start of the next adi field
 		err := p.discardUntilLessThan()
 		if err != nil {
-			return nil, err
+			return nil, false, err
 		}
 
 		field, value, err := p.parseOneField()
 		if err != nil {
-			return nil, err
+			return nil, false, err
 		}
 
 		switch field {
@@ -80,11 +80,10 @@ func (p *adiReader) Next() (Record, error) {
 			if count := result.Count(); count > p.preAllocateFields {
 				p.preAllocateFields = count
 			}
-			return result, nil
+			return result, false, nil
 		case adifield.EOH:
 			if !p.skipHeader {
-				result.SetIsHeader(true)
-				return result, nil
+				return result, true, nil
 			}
 			// we are skipping returning the EOH record (if any)
 			// reset to prepare to read the next record

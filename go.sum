@@ -2,8 +2,8 @@ github.com/Eminlin/GoADIFLog v0.0.0-20230310080720-51e6fad1c012 h1:9jk7mfP0IfufR
 github.com/Eminlin/GoADIFLog v0.0.0-20230310080720-51e6fad1c012/go.mod h1:mcMDppVais4AI3S803uYE9Mts7KVicyiZn4NllBQ6gs=
 github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437 h1:bravWZ8akTqGcbN8CiYXQ74WVRvv5HfUUuHVQ34s6Xg=
 github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437/go.mod h1:FrRQMGHkxX+CKufTY3SM7WM395NhLiOdx5//5Yi6+aI=
-github.com/farmergreg/adif/v5 v5.0.0-beta.14 h1:oEVRFhy1gKQJ38pakab7UBFrdvOvVTmDYi++YSToT5M=
-github.com/farmergreg/adif/v5 v5.0.0-beta.14/go.mod h1:/PRZE7TzWutkUjVg4hFNuj4sbRlSA/ZuXhPmAOa+Ims=
+github.com/farmergreg/adif/v5 v5.0.0-beta.17 h1:GmEsnSbvNTEMc7sGxXLwRPWmUhG34ALsrX45R0sF9s8=
+github.com/farmergreg/adif/v5 v5.0.0-beta.17/go.mod h1:/PRZE7TzWutkUjVg4hFNuj4sbRlSA/ZuXhPmAOa+Ims=
 github.com/farmergreg/spec/v6 v6.0.0-beta.29 h1:Xo80K+Sz6aq+sxmc5j/nzqrFKXx8aS59IJDToZR/h58=
 github.com/farmergreg/spec/v6 v6.0.0-beta.29/go.mod h1:SPPWP5cXZtz1f4y/Ui6R5K1ZEMgJkcVA0AEt7/IfH+I=
 github.com/flwyd/adif-multitool v0.1.20 h1:2JhSbFVCxub0IpFkn66M/2Eh6MbrE8OIPE7MDFYqaCQ=
