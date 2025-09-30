@@ -12,7 +12,7 @@ import (
 	farmergreg "github.com/farmergreg/adif/v5"
 )
 
-func BenchmarkReadFarmerGreg(b *testing.B) {
+func BenchmarkReadFarmerGregADI(b *testing.B) {
 	var qsoList []farmergreg.Record
 
 	for b.Loop() {

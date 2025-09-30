@@ -11,7 +11,7 @@ import (
 	farmergreg "github.com/farmergreg/adif/v5"
 )
 
-func BenchmarkWriteFarmerGreg(b *testing.B) {
+func BenchmarkWriteFarmerGregADI(b *testing.B) {
 	qsoListNative := loadTestData()
 	b.ResetTimer()
 	for b.Loop() {
