@@ -11,10 +11,10 @@ It's idiomatic, developer-friendly API seamlessly integrates with your codebase 
 
 ## ✨ Features
 
+- 🔬 **Tested**: 100% test coverage!
 - 🔧 **Developer Friendly**: Clean, idiomatic, mock friendly interfaces
 - 🚀 **Blazing Fast**: 2x-20x faster than other ADI libraries
 - 💡 **Memory Efficient**: Uses 2x less memory and makes 1400x fewer allocations than other libraries.
-- 🔬 **Tested**: 100% test coverage!
 
 ## 🚀 Quick Start
 

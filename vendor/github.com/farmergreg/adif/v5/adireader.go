@@ -202,18 +202,11 @@ func (p *adiReader) readDataSpecifierVolatile() (volatileSpecifier []byte, err e
 
 // discardUntilLessThan reads until it finds the '<' character
 func (p *adiReader) discardUntilLessThan() (err error) {
-	for {
+	err = bufio.ErrBufferFull
+	for err == bufio.ErrBufferFull {
 		_, err = p.r.ReadSlice('<')
-
-		switch err {
-		case nil:
-			return nil
-		case bufio.ErrBufferFull:
-			continue
-		default:
-			return err
-		}
 	}
+	return err
 }
 
 // parseDataLength is an optimized replacement for strconv.Atoi.
