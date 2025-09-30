@@ -18,8 +18,8 @@ cpu: AMD Ryzen 9 7950X 16-Core Processor
 | Go Std Lib JSON | 636        | 1858340      | 777888        | 25617       |
 | matir ADI       | 850        | 1393314      | 1728728       | 38665       |
 | flwyd ADI       | 534        | 2282365      | 2706391       | 66889       |
-| eminlin ADI     | 222        | 5345511      | 4871133       | 93010       |
 | farmergreg JSON | 403        | 2935292      | 2835496       | 32201       |
+| eminlin ADI     | 222        | 5345511      | 4871133       | 93010       |
 
 ## Write Benchmark
 
