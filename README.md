@@ -14,8 +14,8 @@ cpu: AMD Ryzen 9 7950X 16-Core Processor
 
 | Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
 |-----------------|-----------:|-------------:|--------------:|------------:|
-| farmergreg ADI  | ⭐ 2091    | ⭐ 544733    | ⭐ 781091     | ⭐ 10059  |
-| Go Std Lib JSON | 636        | 1858340      | 777888        | 25617       |
+| farmergreg ADI  | ⭐ 2091    | ⭐ 544733    |  781091       | ⭐ 10059    |
+| Go Std Lib JSON | 636        | 1858340      | ⭐777888      | 25617       |
 | matir ADI       | 850        | 1393314      | 1728728       | 38665       |
 | flwyd ADI       | 534        | 2282365      | 2706391       | 66889       |
 | farmergreg JSON | 403        | 2935292      | 2835496       | 32201       |
