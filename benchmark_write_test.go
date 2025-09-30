@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -60,6 +61,7 @@ func BenchmarkWriteFLWYD(b *testing.B) {
 		p = flwyd.NewADIIO()
 		var sb strings.Builder
 		p.Write(doc, &sb)
+		_ = sb.String()
 	}
 }
 
@@ -68,3 +70,23 @@ func BenchmarkWriteFLWYD(b *testing.B) {
 func BenchmarkWriteEminlin(b *testing.B) {
 }
 */
+
+// BenchmarkWriteGoStdLibJSONDirect benchmarks writing ADIF data using the Go standard library's encoding/json package.
+func BenchmarkWriteGoStdLibJSONDirect(b *testing.B) {
+	doc := &jsonDocument{}
+	decoder := json.NewDecoder(strings.NewReader(benchmarkFileAsJSON))
+	err := decoder.Decode(doc)
+	if err != nil {
+		b.Fatal(err)
+	}
+
+	for b.Loop() {
+		var sb strings.Builder
+		encoder := json.NewEncoder(&sb)
+		err := encoder.Encode(&doc)
+		if err != nil {
+			b.Fatal(err)
+		}
+		_ = sb.String()
+	}
+}

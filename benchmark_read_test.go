@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io"
 	"strings"
 	"testing"
@@ -80,4 +81,17 @@ func BenchmarkReadEminlin(b *testing.B) {
 		_ = len(log)
 	}
 	_ = len(log)
+}
+
+// BenchmarkReadGoStdLibJSONDirect benchmarks reading ADIF data using the Go standard library's encoding/json package.
+func BenchmarkReadGoStdLibJSONDirect(b *testing.B) {
+	doc := &jsonDocument{}
+	for b.Loop() {
+		decoder := json.NewDecoder(strings.NewReader(benchmarkFileAsJSON))
+		err := decoder.Decode(doc)
+		if err != nil {
+			b.Fatal(err)
+		}
+	}
+	_ = len(doc.Records)
 }

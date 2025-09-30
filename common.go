@@ -12,6 +12,9 @@ import (
 //go:embed testdata/N3FJP-AClogAdif.adi
 var benchmarkFile string
 
+//go:embed testdata/N3FJP-AClogAdif.adij
+var benchmarkFileAsJSON string
+
 func loadTestData() []adif.Record {
 	var qsoListNative []adif.Record
 	p := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
@@ -25,9 +28,8 @@ func loadTestData() []adif.Record {
 	return qsoListNative
 }
 
-// adifDocument represents an ADIF document.
-// This may be used directly with the encoding/json package to marshal or unmarshal ADIJ (ADIF as JSON) data.
-type adifDocument struct {
+// jsonDocument represents an ADIF document using a json container format.
+type jsonDocument struct {
 	// Header is nil when there is no header.
 	// Otherwise it is a Record with header fields inside.
 	Header map[string]string `json:"header,omitempty"`
