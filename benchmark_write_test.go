@@ -28,6 +28,23 @@ func BenchmarkWriteFarmerGregADI(b *testing.B) {
 	}
 }
 
+func BenchmarkWriteFarmerGregJSON(b *testing.B) {
+	qsoListNative := loadTestData()
+	b.ResetTimer()
+	for b.Loop() {
+		var sb strings.Builder
+		w := farmergreg.NewJSONRecordWriter(&sb, "")
+		for _, qso := range qsoListNative {
+			err := w.Write(qso, false)
+			if err != nil {
+				b.Fatal(err)
+			}
+		}
+		w.Flush()
+		_ = sb.String()
+	}
+}
+
 func BenchmarkWriteMatir(b *testing.B) {
 	// Setup Matir test data
 	var qsoListMatir []matir.ADIFRecord

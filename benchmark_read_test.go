@@ -33,6 +33,29 @@ func BenchmarkReadFarmerGregADI(b *testing.B) {
 	_ = len(qsoList)
 }
 
+func BenchmarkReadFarmerGregJSON(b *testing.B) {
+	var qsoList []farmergreg.Record
+
+	for b.Loop() {
+		qsoList = make([]farmergreg.Record, 0, 10000)
+		p, err := farmergreg.NewJSONRecordReader(strings.NewReader(benchmarkFileAsJSON), false)
+		if err != nil {
+			b.Fatal(err)
+		}
+		for {
+			q, _, err := p.Next()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				b.Fatal(err)
+			}
+			qsoList = append(qsoList, q)
+		}
+	}
+	_ = len(qsoList)
+}
+
 func BenchmarkReadMatir(b *testing.B) {
 	var qsoList []matir.ADIFRecord
 
