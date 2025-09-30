@@ -56,7 +56,7 @@ func BenchmarkReadFarmerGregJSON(b *testing.B) {
 	_ = len(qsoList)
 }
 
-func BenchmarkReadMatir(b *testing.B) {
+func BenchmarkReadMatirADI(b *testing.B) {
 	var qsoList []matir.ADIFRecord
 
 	for b.Loop() {
@@ -77,7 +77,7 @@ func BenchmarkReadMatir(b *testing.B) {
 	_ = len(qsoList)
 }
 
-func BenchmarkReadFLWYD(b *testing.B) {
+func BenchmarkReadFlwydADI(b *testing.B) {
 	var log *flwyd.Logfile
 	var err error
 
@@ -92,7 +92,7 @@ func BenchmarkReadFLWYD(b *testing.B) {
 	_ = len(log.Records)
 }
 
-func BenchmarkReadEminlin(b *testing.B) {
+func BenchmarkReadEminlinADI(b *testing.B) {
 	var log []eminlinformat.CQLog
 	var err error
 
@@ -106,8 +106,8 @@ func BenchmarkReadEminlin(b *testing.B) {
 	_ = len(log)
 }
 
-// BenchmarkReadGoStdLibJSONDirect benchmarks reading ADIF data using the Go standard library's encoding/json package.
-func BenchmarkReadGoStdLibJSONDirect(b *testing.B) {
+// BenchmarkReadGoStdLibDirectJSON benchmarks reading ADIF data using the Go standard library's encoding/json package.
+func BenchmarkReadGoStdLibDirectJSON(b *testing.B) {
 	doc := &jsonDocument{}
 	for b.Loop() {
 		decoder := json.NewDecoder(strings.NewReader(benchmarkFileAsJSON))

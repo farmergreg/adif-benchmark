@@ -45,7 +45,7 @@ func BenchmarkWriteFarmerGregJSON(b *testing.B) {
 	}
 }
 
-func BenchmarkWriteMatir(b *testing.B) {
+func BenchmarkWriteMatirADI(b *testing.B) {
 	// Setup Matir test data
 	var qsoListMatir []matir.ADIFRecord
 	r := matir.NewADIFReader(strings.NewReader(benchmarkFile))
@@ -67,7 +67,7 @@ func BenchmarkWriteMatir(b *testing.B) {
 	}
 }
 
-func BenchmarkWriteFLWYD(b *testing.B) {
+func BenchmarkWriteFlwydADI(b *testing.B) {
 	p := flwyd.NewADIIO()
 	doc, err := p.Read(strings.NewReader(benchmarkFile))
 	if err != nil {
@@ -84,12 +84,12 @@ func BenchmarkWriteFLWYD(b *testing.B) {
 
 /*
 // Eminlin does not support writing adi files
-func BenchmarkWriteEminlin(b *testing.B) {
+func BenchmarkWriteEminlinADI(b *testing.B) {
 }
 */
 
-// BenchmarkWriteGoStdLibJSONDirect benchmarks writing ADIF data using the Go standard library's encoding/json package.
-func BenchmarkWriteGoStdLibJSONDirect(b *testing.B) {
+// BenchmarkWriteGoStdLibDirectJSON benchmarks writing ADIF data using the Go standard library's encoding/json package.
+func BenchmarkWriteGoStdLibDirectJSON(b *testing.B) {
 	doc := &jsonDocument{}
 	decoder := json.NewDecoder(strings.NewReader(benchmarkFileAsJSON))
 	err := decoder.Decode(doc)
