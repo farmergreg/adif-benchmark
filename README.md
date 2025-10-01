@@ -14,12 +14,12 @@ cpu: AMD Ryzen 9 7950X 16-Core Processor
 
 | Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
 |-----------------|-----------:|-------------:|--------------:|------------:|
-| farmergreg ADI  | ⭐ 2091    | ⭐ 544733    |  781091       | ⭐ 10059    |
-| Go Std Lib JSON | 636        | 1858340      | ⭐777888      | 25617       |
-| matir ADI       | 850        | 1393314      | 1728728       | 38665       |
-| flwyd ADI       | 534        | 2282365      | 2706391       | 66889       |
-| farmergreg JSON | 403        | 2935292      | 2835496       | 32201       |
-| eminlin ADI     | 222        | 5345511      | 4871133       | 93010       |
+| farmergreg ADI  | ⭐ 2083    | ⭐ 547270    | 781104       | ⭐ 10058    |
+| Go Std Lib JSON | 648        | 1833157      | ⭐ 777858    | 25617        |
+| matir ADI       | 866        | 1363796      | 1728728       | 38665       |
+| flwyd ADI       | 529        | 2271703      | 2706394       | 66889       |
+| farmergreg JSON | 422        | 2843286      | 2835498       | 32201       |
+| eminlin ADI     | 220        | 5410024      | 4874325       | 93011       |
 
 ## Write Benchmark
 
@@ -27,11 +27,11 @@ cpu: AMD Ryzen 9 7950X 16-Core Processor
 
 | Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
 |-----------------|-----------:|-------------:|--------------:|------------:|
-| farmergreg ADI  | ⭐ 2239    | ⭐ 503240    | ⭐ 570984     | ⭐ 3094   |
-| Go Std Lib JSON | 1081       | 1076449      | 813417        | 17804       |
-| farmergreg JSON | 649        | 1833757      | 1873563       | 22207       |
-| matir ADI       | 607        | 1954607      | 1490464       | 28673       |
-| flwyd ADI       | 534        | 2262501      | 2279064       | 54302       |
+| farmergreg ADI  | ⭐ 2326    | ⭐ 505112    | ⭐ 571013    | ⭐ 3095    |
+| Go Std Lib JSON | 1107       | 1087908      | 813832        | 17804       |
+| farmergreg JSON | 642        | 1852393      | 1871253       | 22207       |
+| matir ADI       | 638        | 1863878      | 1490438       | 28673       |
+| flwyd ADI       | 566        | 2142214      | 2279077       | 54302       |
 | eminlin ADI     | N/A        | N/A          | N/A           | N/A         |
 
 ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
