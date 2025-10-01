@@ -8,8 +8,8 @@ import (
 	_ "embed"
 
 	matir "github.com/Matir/adifparser"
-	flwyd "github.com/flwyd/adif-multitool/adif"
 	farmergreg "github.com/farmergreg/adif/v5"
+	flwyd "github.com/flwyd/adif-multitool/adif"
 )
 
 func BenchmarkWriteFarmerGregADI(b *testing.B) {
@@ -23,6 +23,9 @@ func BenchmarkWriteFarmerGregADI(b *testing.B) {
 			if err != nil {
 				b.Fatal(err)
 			}
+		}
+		if err := w.Flush(); err != nil {
+			b.Fatal(err)
 		}
 		_ = sb.String()
 	}
@@ -40,7 +43,7 @@ func BenchmarkWriteFarmerGregJSON(b *testing.B) {
 				b.Fatal(err)
 			}
 		}
-		if err := w.Close(); err!=nil {
+		if err := w.Flush(); err != nil {
 			b.Fatal(err)
 		}
 		_ = sb.String()
@@ -64,6 +67,9 @@ func BenchmarkWriteMatirADI(b *testing.B) {
 		mw := matir.NewADIFWriter(&sb)
 		for _, qso := range qsoListMatir {
 			mw.WriteRecord(qso)
+		}
+		if err := mw.Flush(); err != nil {
+			b.Fatal(err)
 		}
 		_ = sb.String()
 	}

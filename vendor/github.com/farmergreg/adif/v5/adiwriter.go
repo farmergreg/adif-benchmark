@@ -196,6 +196,6 @@ func appendADIFRecordAsADIPreCalculate(r Record) (adiLength int) {
 	return adiLength + 6 // "<eor>\n" / "<eoh>\n"
 }
 
-func (w *adiWriter) Close() error {
+func (w *adiWriter) Flush() error {
 	return nil
 }

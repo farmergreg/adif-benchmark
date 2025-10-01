@@ -44,8 +44,8 @@ func (j *jsonWriter) WriteRecord(record Record) error {
 	return nil
 }
 
-// Close implements RecordWriteFlusher.Close
-func (j *jsonWriter) Close() error {
+// Flush implements RecordWriteFlusher.Flush
+func (j *jsonWriter) Flush() error {
 	encoder := json.NewEncoder(j.w)
 	encoder.SetIndent("", j.indent)
 	err := encoder.Encode(j.doc)

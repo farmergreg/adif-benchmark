@@ -33,7 +33,7 @@ type DocumentWriter interface {
 	// When writing a header record, it MUST be the first record written.
 	WriteRecord(record Record) error
 
-	// Close writes buffered data (if any) to the underlying writer.
-	// IMPORTANT: this MUST be called when all records have been written to ensure all data is flushed to the underlying writer.
-	Close() error
+	// Flush writes buffered data to the underlying writer.
+	// IMPORTANT: This MUST be called once the header and records have been written to ensure all data is properly written.
+	Flush() error
 }

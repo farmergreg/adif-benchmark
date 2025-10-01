@@ -15,7 +15,7 @@ type adiRecord struct {
 	allCache []adifield.Field          // all sorts the keys prior to iterating, this caches that work
 }
 
-// NewRecord creates a new adiRecord with the default initial capacity.
+// NewRecord creates a new Record with the default initial capacity.
 func NewRecord() Record {
 	return newRecordWithCapacity(-1)
 }
