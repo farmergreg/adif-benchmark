@@ -4,8 +4,8 @@ This library provides high-performance processing of [ADIF](https://adif.org/) (
 It's idiomatic, developer-friendly API seamlessly integrates with your codebase and the go standard library.
 
 [![Tests](https://github.com/farmergreg/adif/actions/workflows/test.yml/badge.svg)](https://github.com/farmergreg/adif/actions/workflows/test.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/farmergreg/adif)](https://goreportcard.com/report/github.com/farmergreg/adif)
-[![Go Reference](https://pkg.go.dev/badge/github.com/farmergreg/adif.svg)](https://pkg.go.dev/github.com/farmergreg/adif)
+[![Go Report Card](https://goreportcard.com/badge/github.com/farmergreg/adif/v5)](https://goreportcard.com/report/github.com/farmergreg/adif/v5)
+[![Go Reference](https://pkg.go.dev/badge/github.com/farmergreg/adif/v5.svg)](https://pkg.go.dev/github.com/farmergreg/adif/v5)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/farmergreg/adif)](https://github.com/farmergreg/adif/blob/main/go.mod)
 [![License](https://img.shields.io/github/license/farmergreg/adif)](https://github.com/farmergreg/adif/blob/main/LICENSE)
 
