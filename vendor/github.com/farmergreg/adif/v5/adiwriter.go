@@ -9,7 +9,7 @@ import (
 	"github.com/farmergreg/spec/v6/adifield"
 )
 
-var _ RecordWriter = (*adiWriter)(nil)
+var _ DocumentWriter = (*adiWriter)(nil)
 
 const adiHeaderPreamble = "                    AM✠DG\nK9CTS High Performance ADIF Processing Library\n   https://github.com/farmergreg/adif\n\n"
 
@@ -60,7 +60,8 @@ type adiWriter struct {
 	// This text will be added to the start of a file if there is a header record.
 	// To satisfy the ADIF specification which states:
 	// If the first character in an ADI file is <, it contains no Header.
-	headerPreamble string
+	headerPreamble  string
+	isHeaderWritten bool
 }
 
 var adiWriterBufferPool = sync.Pool{
@@ -70,35 +71,37 @@ var adiWriterBufferPool = sync.Pool{
 	},
 }
 
-// NewADIRecordWriter returns an ADIFRecordWriter that can write ADIF *.adi formatted records.
-func NewADIRecordWriter(w io.Writer) RecordWriter {
-	return NewADIRecordWriterWithPreamble(w, adiHeaderPreamble)
+// NewADIDocumentWriter returns an ADIFDocumentWriter that can write ADIF *.adi formatted records.
+func NewADIDocumentWriter(w io.Writer) DocumentWriter {
+	return NewADIDocumentWriterWithPreamble(w, adiHeaderPreamble)
 }
 
-// NewADIRecordWriterWithPreamble returns an ADIFRecordWriter that can write ADIF *.adi formatted records with a custom preamble for header records.
-func NewADIRecordWriterWithPreamble(w io.Writer, adiPreamble string) RecordWriter {
+// NewADIDocumentWriterWithPreamble returns an ADIFDocumentWriter that can write ADIF *.adi formatted records with a custom preamble for header records.
+func NewADIDocumentWriterWithPreamble(w io.Writer, adiPreamble string) DocumentWriter {
 	return &adiWriter{
 		w:              w,
 		headerPreamble: adiPreamble,
 	}
 }
 
-func (w *adiWriter) Write(r Record, isHeader bool) error {
-	if isHeader {
-		if w.headerPreamble == "" {
-			// preamble is mandatory per the ADIF specification.
-			w.w.Write([]byte{'\n'})
-		} else {
-			w.w.Write([]byte(w.headerPreamble))
-		}
+func (w *adiWriter) WriteHeader(r Record) error {
+	if w.isHeaderWritten {
+		return ErrHeaderAlreadyWritten
 	}
+	w.isHeaderWritten = true
 
-	err := w.writeInternal(r, isHeader)
-	if err != nil {
-		return err
+	if w.headerPreamble == "" {
+		// preamble is mandatory per the ADIF specification.
+		w.w.Write([]byte{'\n'})
+	} else {
+		w.w.Write([]byte(w.headerPreamble))
 	}
+	return w.writeInternal(r, true)
+}
 
-	return nil
+func (w *adiWriter) WriteRecord(r Record) error {
+	w.isHeaderWritten = true
+	return w.writeInternal(r, false)
 }
 
 func (w *adiWriter) writeInternal(r Record, isHeader bool) error {
@@ -191,4 +194,8 @@ func appendADIFRecordAsADIPreCalculate(r Record) (adiLength int) {
 	}
 
 	return adiLength + 6 // "<eor>\n" / "<eoh>\n"
+}
+
+func (w *adiWriter) Close() error {
+	return nil
 }

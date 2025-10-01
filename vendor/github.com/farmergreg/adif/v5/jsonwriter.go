@@ -6,21 +6,21 @@ import (
 	"maps"
 )
 
-var _ RecordWriteFlusher = (*jsonWriter)(nil)
+var _ DocumentWriter = (*jsonWriter)(nil)
 
-// jsonWriter implements ADIFRecordWriter for writing ADIF records in ADIJ format.
+// jsonWriter implements ADIFDocumentWriter for writing ADIF records in ADIJ format.
 type jsonWriter struct {
 	w      io.Writer
 	doc    *jsonDocument
 	indent string
 }
 
-// NewJSONRecordWriter creates a new ADIFRecordWriter that writes ADIJ JSON to the provided io.Writer.
+// NewJSONDocumentWriter creates a new ADIFDocumentWriter that writes ADIJ JSON to the provided io.Writer.
 // The indent parameter specifies the string to use for indentation (e.g. "\t" or "  ").
 // An empty string means no indentation.
 // JSON is not an official ADIF document container format.
 // It is, however, useful for interoperability with other systems.
-func NewJSONRecordWriter(w io.Writer, indent string) RecordWriteFlusher {
+func NewJSONDocumentWriter(w io.Writer, indent string) DocumentWriter {
 	return &jsonWriter{
 		w:      w,
 		doc:    &jsonDocument{},
@@ -28,22 +28,24 @@ func NewJSONRecordWriter(w io.Writer, indent string) RecordWriteFlusher {
 	}
 }
 
-// Write implements ADIFRecordWriter.Write for writing ADIF records in ADIJ format.
-func (j *jsonWriter) Write(record Record, isHeader bool) error {
-	r := maps.Collect(record.All())
-	if isHeader {
-		if j.doc.Header != nil {
-			return ErrHeaderAlreadyWritten
-		}
-		j.doc.Header = r
-		return nil
+// WriteHeader implements ADIFDocumentWriter.WriteHeader for writing ADIF headers in ADIJ format.
+func (j *jsonWriter) WriteHeader(record Record) error {
+	if j.doc.Header != nil || len(j.doc.Records) > 0 {
+		return ErrHeaderAlreadyWritten
 	}
+	j.doc.Header = maps.Collect(record.All())
+	return nil
+}
+
+// WriteRecord implements ADIFDocumentWriter.WriteRecord for writing ADIF records in ADIJ format.
+func (j *jsonWriter) WriteRecord(record Record) error {
+	r := maps.Collect(record.All())
 	j.doc.Records = append(j.doc.Records, r)
 	return nil
 }
 
-// Flush implements RecordWriteFlusher.Flush
-func (j *jsonWriter) Flush() error {
+// Close implements RecordWriteFlusher.Close
+func (j *jsonWriter) Close() error {
 	encoder := json.NewEncoder(j.w)
 	encoder.SetIndent("", j.indent)
 	err := encoder.Encode(j.doc)

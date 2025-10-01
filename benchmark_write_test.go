@@ -17,9 +17,9 @@ func BenchmarkWriteFarmerGregADI(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		w := farmergreg.NewADIRecordWriter(&sb)
+		w := farmergreg.NewADIDocumentWriter(&sb)
 		for _, qso := range qsoListNative {
-			err := w.Write(qso, false)
+			err := w.WriteRecord(qso)
 			if err != nil {
 				b.Fatal(err)
 			}
@@ -33,14 +33,16 @@ func BenchmarkWriteFarmerGregJSON(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		w := farmergreg.NewJSONRecordWriter(&sb, "")
+		w := farmergreg.NewJSONDocumentWriter(&sb, "")
 		for _, qso := range qsoListNative {
-			err := w.Write(qso, false)
+			err := w.WriteRecord(qso)
 			if err != nil {
 				b.Fatal(err)
 			}
 		}
-		w.Flush()
+		if err := w.Close(); err!=nil {
+			b.Fatal(err)
+		}
 		_ = sb.String()
 	}
 }

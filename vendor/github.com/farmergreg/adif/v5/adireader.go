@@ -10,18 +10,7 @@ import (
 	"github.com/farmergreg/spec/v6/adifield"
 )
 
-var _ RecordReader = (*adiReader)(nil)
-
-const (
-	// 1MB - this is the maximum size of a field value that we will accept.
-	// This is intended to be a generous limit for most applications while providing some protection against malformed and/or malicious input.
-	//
-	// The data is part of the ADIF "Data-Specifier."
-	// Per the ADIF spec:
-	//   ADI-exporting applications can place as much data in a Data-Specifier as they choose.
-	//   ADI-importing applications can import as much data from a Data-Specifier as they choose.
-	maxADIReaderDataSize = 1024 * 1024 * 1
-)
+var _ DocumentReader = (*adiReader)(nil)
 
 // adiReader is a high-performance ADIF Reader that can parse ADIF *.adi formatted records.
 type adiReader struct {
@@ -40,18 +29,19 @@ type adiReader struct {
 	skipHeader bool
 }
 
-// NewADIRecordReader returns an ADIFReader that can parse ADIF *.adi formatted records.
+// NewADIDocumentReader returns an ADIFReader that can parse ADIF *.adi formatted records.
 // If skipHeader is true, Next() will not return the header record if it exists.
 // This is a streaming parser that processes the input as it is read, using minimal memory.
-func NewADIRecordReader(r io.Reader, skipHeader bool) *adiReader {
+func NewADIDocumentReader(r io.Reader, skipHeader bool) *adiReader {
 	br, ok := r.(*bufio.Reader)
 	if !ok {
 		br = bufio.NewReader(r)
 	}
 
 	p := &adiReader{
-		r:          br,
-		skipHeader: skipHeader,
+		r:                 br,
+		skipHeader:        skipHeader,
+		preAllocateFields: 16,
 	}
 	p.appFieldMap = make(map[string]adifield.Field, 128)
 	p.bufValue = make([]byte, 4096)
@@ -77,17 +67,16 @@ func (p *adiReader) Next() (Record, bool, error) {
 
 		switch field {
 		case adifield.EOR:
-			if count := result.Count(); count > p.preAllocateFields {
-				p.preAllocateFields = count
-			}
+			p.preAllocateFields = result.Count()
 			return result, false, nil
 		case adifield.EOH:
-			if !p.skipHeader {
-				return result, true, nil
+			if p.skipHeader {
+				// we are skipping returning the EOH record (if any)
+				// reset to prepare to read the next record
+				result.reset()
+				continue
 			}
-			// we are skipping returning the EOH record (if any)
-			// reset to prepare to read the next record
-			result.reset()
+			return result, true, nil
 		}
 
 		// n.b. if a duplicate field is found, it will replace the previous value
@@ -172,7 +161,7 @@ func (p *adiReader) parseOneField() (field adifield.Field, value string, err err
 //	<F:L:T>
 func (p *adiReader) readDataSpecifierVolatile() (volatileSpecifier []byte, err error) {
 	// If ReadSlice returns bufio.ErrBufferFull, accumulator will contain ALL of the bytes read.
-	// In most cases, accumulator will be null because we won't hit the bufio.ErrBufferFull condition.
+	// In most cases, accumulator will be nil because we won't hit the bufio.ErrBufferFull condition.
 	var accumulator []byte
 	for {
 		volatileSpecifier, err = p.r.ReadSlice('>')
@@ -202,7 +191,7 @@ func (p *adiReader) readDataSpecifierVolatile() (volatileSpecifier []byte, err e
 
 // discardUntilLessThan reads until it finds the '<' character
 func (p *adiReader) discardUntilLessThan() (err error) {
-	err = bufio.ErrBufferFull
+	_, err = p.r.ReadSlice('<')
 	for err == bufio.ErrBufferFull {
 		_, err = p.r.ReadSlice('<')
 	}
@@ -212,19 +201,17 @@ func (p *adiReader) discardUntilLessThan() (err error) {
 // parseDataLength is an optimized replacement for strconv.Atoi.
 func parseDataLength(data []byte) (value int, err error) {
 	// prevent overflow; int32 max is 2,147,483,647 (10 digits)
-	// we limit ourselves to 1,000,000,000 maximum
-	if count := len(data); count == 0 || count > 10 {
+	// we limit ourselves to 999,999,999 maximum
+	if count := len(data); count == 0 || count > 9 {
 		return 0, ErrAdiReaderMalformedADI
 	}
 
+	hasValidDigits := true
 	for _, b := range data {
-		if b < '0' || b > '9' {
-			return 0, ErrAdiReaderMalformedADI
-		}
+		hasValidDigits = hasValidDigits && b >= '0' && b <= '9'
 		value = value*10 + int(b-'0') // Parse digit, avoiding string allocations
 	}
-
-	if value > maxADIReaderDataSize {
+	if !hasValidDigits {
 		return 0, ErrAdiReaderMalformedADI
 	}
 

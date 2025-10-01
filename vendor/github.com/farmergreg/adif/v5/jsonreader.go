@@ -7,7 +7,7 @@ import (
 	"github.com/farmergreg/spec/v6/adifield"
 )
 
-var _ RecordReader = (*jsonReader)(nil)
+var _ DocumentReader = (*jsonReader)(nil)
 
 type jsonReader struct {
 	document     *jsonDocument
@@ -15,9 +15,9 @@ type jsonReader struct {
 	skipHeader   bool
 }
 
-// NewJSONRecordReader returns an ADIFRecordReader that can parse ADIF records in ADIJ JSON format.
+// NewJSONDocumentReader returns an ADIFDocumentReader that can parse ADIF records in ADIJ JSON format.
 // If skipHeader is true, Next() will not return the header record if it exists.
-func NewJSONRecordReader(r io.Reader, skipHeader bool) (RecordReader, error) {
+func NewJSONDocumentReader(r io.Reader, skipHeader bool) (DocumentReader, error) {
 	var doc jsonDocument
 	decoder := json.NewDecoder(r)
 	err := decoder.Decode(&doc)
@@ -34,7 +34,7 @@ func NewJSONRecordReader(r io.Reader, skipHeader bool) (RecordReader, error) {
 	return reader, nil
 }
 
-// Next implements ADIFRecordReader.
+// Next implements ADIFDocumentReader.
 func (r *jsonReader) Next() (record Record, isHeader bool, err error) {
 	if r.currentIndex >= len(r.document.Records) {
 		return nil, false, io.EOF

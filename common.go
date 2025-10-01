@@ -17,7 +17,7 @@ var benchmarkFileAsJSON string
 
 func loadTestData() []adif.Record {
 	var qsoListNative []adif.Record
-	p := adif.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
+	p := adif.NewADIDocumentReader(strings.NewReader(benchmarkFile), false)
 	for {
 		record, _, err := p.Next()
 		if err == io.EOF {

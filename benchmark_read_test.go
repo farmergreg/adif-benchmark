@@ -18,7 +18,7 @@ func BenchmarkReadFarmerGregADI(b *testing.B) {
 
 	for b.Loop() {
 		qsoList = make([]farmergreg.Record, 0, 10000)
-		p := farmergreg.NewADIRecordReader(strings.NewReader(benchmarkFile), false)
+		p := farmergreg.NewADIDocumentReader(strings.NewReader(benchmarkFile), false)
 		for {
 			q, _, err := p.Next()
 			if err == io.EOF {
@@ -38,7 +38,7 @@ func BenchmarkReadFarmerGregJSON(b *testing.B) {
 
 	for b.Loop() {
 		qsoList = make([]farmergreg.Record, 0, 10000)
-		p, err := farmergreg.NewJSONRecordReader(strings.NewReader(benchmarkFileAsJSON), false)
+		p, err := farmergreg.NewJSONDocumentReader(strings.NewReader(benchmarkFileAsJSON), false)
 		if err != nil {
 			b.Fatal(err)
 		}
