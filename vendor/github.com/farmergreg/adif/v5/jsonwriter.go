@@ -33,13 +33,13 @@ func (j *jsonWriter) WriteHeader(record Record) error {
 	if j.doc.Header != nil || len(j.doc.Records) > 0 {
 		return ErrHeaderAlreadyWritten
 	}
-	j.doc.Header = maps.Collect(record.All())
+	j.doc.Header = maps.Collect(record.Fields())
 	return nil
 }
 
 // WriteRecord implements ADIFDocumentWriter.WriteRecord for writing ADIF records in ADIJ format.
 func (j *jsonWriter) WriteRecord(record Record) error {
-	r := maps.Collect(record.All())
+	r := maps.Collect(record.Fields())
 	j.doc.Records = append(j.doc.Records, r)
 	return nil
 }

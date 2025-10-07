@@ -6,6 +6,6 @@ import (
 
 // jsonDocument represents an ADIF document in a JSON container.
 type jsonDocument struct {
-	Header  map[adifield.Field]string   `json:"header,omitempty"`
-	Records []map[adifield.Field]string `json:"records"`
+	Header  map[adifield.Field]string   `json:"HEADER,omitempty"`
+	Records []map[adifield.Field]string `json:"RECORDS"`
 }

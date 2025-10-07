@@ -41,7 +41,7 @@ func NewADIDocumentReader(r io.Reader, skipHeader bool) DocumentReader {
 	p := &adiReader{
 		r:                 br,
 		skipHeader:        skipHeader,
-		preAllocateFields: 16,
+		preAllocateFields: -1, // use default initial capacity
 	}
 	p.appFieldMap = make(map[string]adifield.Field, 128)
 	p.bufValue = make([]byte, 4096)
@@ -67,7 +67,7 @@ func (p *adiReader) Next() (Record, bool, error) {
 
 		switch field {
 		case adifield.EOR:
-			p.preAllocateFields = result.Count()
+			p.preAllocateFields = result.FieldCount()
 			return result, false, nil
 		case adifield.EOH:
 			if p.skipHeader {

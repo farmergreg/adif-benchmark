@@ -5,13 +5,13 @@ import (
 )
 
 // Record represents a single ADIF record.
-// It may be either a Header, or a QSO.
+// It represents both Header and QSO records.
 type Record interface {
 	Get(field adifield.Field) string        // Get returns the value for the specified field, or an empty string if the field is not present.
 	Set(field adifield.Field, value string) // Set sets the value for the specified field.
 
-	All() func(func(adifield.Field, string) bool) // All returns an iterator that yields field-value pairs for all fields in the record.
-	Count() int                                   // Count returns the number of fields in the record.
+	Fields() func(func(adifield.Field, string) bool) // Fields returns an iterator that yields field-value pairs for all fields in the record.
+	FieldCount() int                                 // FieldCount returns the number of fields in the record.
 }
 
 // DocumentReader reads Amateur Data Interchange Format (ADIF) records sequentially.

@@ -127,7 +127,7 @@ func (w *adiWriter) writeInternal(r Record, isHeader bool) error {
 // You should use appendAsADIPreCalculate() to determine the required buffer capacity.
 // Field order is NOT guaranteed to be stable.
 func appendAsADI(r Record, isHeader bool, buf []byte) []byte {
-	if r.Count() == 0 {
+	if r.FieldCount() == 0 {
 		return buf
 	}
 
@@ -137,7 +137,7 @@ func appendAsADI(r Record, isHeader bool, buf []byte) []byte {
 	}
 
 	// Remaining fields
-	for field, value := range r.All() {
+	for field, value := range r.Fields() {
 		if _, isPriority := adiWriterPriorityFieldMap[field]; isPriority {
 			continue
 		}
@@ -145,9 +145,9 @@ func appendAsADI(r Record, isHeader bool, buf []byte) []byte {
 	}
 
 	if isHeader {
-		buf = append(buf, "<eoh>\n"...)
+		buf = append(buf, "<EOH>\n"...)
 	} else {
-		buf = append(buf, "<eor>\n"...)
+		buf = append(buf, "<EOR>\n"...)
 	}
 
 	return buf
@@ -169,7 +169,7 @@ func appendADIFRecordAsADI(buf []byte, field adifield.Field, value string) []byt
 
 // appendADIFRecordAsADIPreCalculate returns the length of the record in bytes when exported to ADI format by the appendAsADI method.
 func appendADIFRecordAsADIPreCalculate(r Record) (adiLength int) {
-	for field, value := range r.All() {
+	for field, value := range r.Fields() {
 		valueLength := len(value)
 		if valueLength == 0 {
 			continue
