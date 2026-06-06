@@ -10,29 +10,36 @@ The same data in JSON format is benchmarked using the Go standard library to pro
 
 ## Read Benchmark
 
-cpu: AMD Ryzen 9 7950X 16-Core Processor
+```
+go test -run=^$ -bench=^BenchmarkRead -benchtime=10s -benchmem ./...
+```
 
-| Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-|-----------------|-----------:|-------------:|--------------:|------------:|
-| farmergreg ADI  | ⭐ 2083    | ⭐ 547270    | 781104       | ⭐ 10058    |
-| matir ADI       | 866        | 1363796      | 1728728       | 38665       |
-| Go Std Lib JSON | 648        | 1833157      | ⭐ 777858    | 25617        |
-| flwyd ADI       | 529        | 2271703      | 2706394       | 66889       |
-| farmergreg JSON | 422        | 2843286      | 2835498       | 32201       |
-| eminlin ADI     | 220        | 5410024      | 4874325       | 93011       |
+cpu: AMD Ryzen 9 7950X 16-Core Processor, 128GB DDR5 3600 MT/s
+
+| Library              | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+|----------------------|-----------:|-------------:|--------------:|------------:|
+| farmergreg ADI       | ⭐ 22122   | ⭐ 545532    | ⭐ 690998    | ⭐ 1822     |
+| matir ADI            | 7564       | 1586714      | 1728681       | 38664       |
+| flwyd ADI            | 4683       | 2563667      | 2706361       | 66888       |
+| farmergreg ADIJ      | 3009       | 3935960      | 2032639       | 31743       |
+| eminlin ADI          | 2036       | 5854294      | 4901840       | 93015       |
 
 ## Write Benchmark
 
-cpu: AMD Ryzen 9 7950X 16-Core Processor
+```
+go test -run=^$ -bench=^BenchmarkWrite -benchtime=10s -benchmem ./...
+```
 
-| Library         | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
-|-----------------|-----------:|-------------:|--------------:|------------:|
-| farmergreg ADI  | ⭐ 2326    | ⭐ 505112    | ⭐ 571013    | ⭐ 3095    |
-| Go Std Lib JSON | 1107       | 1087908      | 813832        | 17804       |
-| farmergreg JSON | 642        | 1852393      | 1871253       | 22207       |
-| matir ADI       | 638        | 1863878      | 1490438       | 28673       |
-| flwyd ADI       | 566        | 2142214      | 2279077       | 54302       |
-| eminlin ADI     | N/A        | N/A          | N/A           | N/A         |
+cpu: AMD Ryzen 9 7950X 16-Core Processor, 128GB DDR5 3600 MT/s
+
+| Library                 | Iterations | Time (ns/op) | Memory (B/op) | Allocations |
+|-------------------------|-----------:|-------------:|--------------:|------------:|
+| farmergreg ADI (fast)   | ⭐ 38310   | ⭐ 313884    | ⭐ 514605    | ⭐ 20       |
+| farmergreg ADI (pretty) | 19114      | 628316       | 515653        | 21          |
+| farmergreg JSON         | 9841       | 1234206      | 813318        | 17803       |
+| matir ADI               | 5811       | 2071384      | 1491163       | 28674       |
+| flwyd ADI               | 4999       | 2329295      | 2278837       | 54304       |
+| eminlin ADI             | N/A        | N/A          | N/A           | N/A         |
 
 ⭐ indicates best performance in each metric (higher iterations = better, lower time/memory/allocations = better)
 

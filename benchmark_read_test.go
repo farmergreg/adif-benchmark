@@ -18,42 +18,25 @@ func BenchmarkReadFarmerGregADI(b *testing.B) {
 
 	for b.Loop() {
 		qsoList = make([]farmergreg.Record, 0, 10000)
-		p := farmergreg.NewADIDocumentReader(strings.NewReader(benchmarkFile), false)
-		for {
-			q, _, err := p.Next()
-			if err == io.EOF {
-				break
-			}
-			if err != nil {
-				b.Fatal(err)
-			}
-			qsoList = append(qsoList, q)
+		s := farmergreg.NewScanner(strings.NewReader(benchmarkFile))
+		for s.Scan() {
+			qsoList = append(qsoList, s.Record())
+		}
+		if err := s.Err(); err != nil {
+			b.Fatal(err)
 		}
 	}
 	_ = len(qsoList)
 }
 
-func BenchmarkReadFarmerGregJSON(b *testing.B) {
-	var qsoList []farmergreg.Record
-
+func BenchmarkReadFarmerGregADIJ(b *testing.B) {
 	for b.Loop() {
-		qsoList = make([]farmergreg.Record, 0, 10000)
-		p, err := farmergreg.NewJSONDocumentReader(strings.NewReader(benchmarkFileAsJSON), false)
-		if err != nil {
+		doc := farmergreg.NewDocument()
+		if err := json.Unmarshal([]byte(benchmarkFileAsJSON), doc); err != nil {
 			b.Fatal(err)
 		}
-		for {
-			q, _, err := p.Next()
-			if err == io.EOF {
-				break
-			}
-			if err != nil {
-				b.Fatal(err)
-			}
-			qsoList = append(qsoList, q)
-		}
+		_ = len(doc.Records)
 	}
-	_ = len(qsoList)
 }
 
 func BenchmarkReadMatirADI(b *testing.B) {
@@ -71,7 +54,6 @@ func BenchmarkReadMatirADI(b *testing.B) {
 				b.Fatal(err)
 			}
 			qsoList = append(qsoList, q)
-			_ = len(qsoList)
 		}
 	}
 	_ = len(qsoList)
@@ -104,17 +86,4 @@ func BenchmarkReadEminlinADI(b *testing.B) {
 		_ = len(log)
 	}
 	_ = len(log)
-}
-
-// BenchmarkReadGoStdLibDirectJSON benchmarks reading ADIF data using the Go standard library's encoding/json package.
-func BenchmarkReadGoStdLibDirectJSON(b *testing.B) {
-	doc := &jsonDocument{}
-	for b.Loop() {
-		decoder := json.NewDecoder(strings.NewReader(benchmarkFileAsJSON))
-		err := decoder.Decode(doc)
-		if err != nil {
-			b.Fatal(err)
-		}
-	}
-	_ = len(doc.Records)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"strings"
 	"testing"
 
@@ -17,10 +18,27 @@ func BenchmarkWriteFarmerGregADI(b *testing.B) {
 	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		w := farmergreg.NewADIDocumentWriter(&sb)
+		w := farmergreg.NewWriter(&sb).SetWriteMode(farmergreg.WriteModeFast)
 		for _, qso := range qsoListNative {
-			err := w.WriteRecord(qso)
-			if err != nil {
+			if err := w.Write(qso); err != nil {
+				b.Fatal(err)
+			}
+		}
+		if err := w.Flush(); err != nil {
+			b.Fatal(err)
+		}
+		_ = sb.String()
+	}
+}
+
+func BenchmarkWriteFarmerGregADIPretty(b *testing.B) {
+	qsoListNative := loadTestData()
+	b.ResetTimer()
+	for b.Loop() {
+		var sb strings.Builder
+		w := farmergreg.NewWriter(&sb)
+		for _, qso := range qsoListNative {
+			if err := w.Write(qso); err != nil {
 				b.Fatal(err)
 			}
 		}
@@ -32,18 +50,11 @@ func BenchmarkWriteFarmerGregADI(b *testing.B) {
 }
 
 func BenchmarkWriteFarmerGregJSON(b *testing.B) {
-	qsoListNative := loadTestData()
+	doc := loadFarmerGregDocument()
 	b.ResetTimer()
 	for b.Loop() {
 		var sb strings.Builder
-		w := farmergreg.NewJSONDocumentWriter(&sb, "")
-		for _, qso := range qsoListNative {
-			err := w.WriteRecord(qso)
-			if err != nil {
-				b.Fatal(err)
-			}
-		}
-		if err := w.Flush(); err != nil {
+		if err := json.NewEncoder(&sb).Encode(doc); err != nil {
 			b.Fatal(err)
 		}
 		_ = sb.String()
@@ -56,11 +67,15 @@ func BenchmarkWriteMatirADI(b *testing.B) {
 	r := matir.NewADIFReader(strings.NewReader(benchmarkFile))
 	for {
 		qso, err := r.ReadRecord()
-		if err != nil {
+		if err == io.EOF {
 			break
+		}
+		if err != nil {
+			b.Fatal(err)
 		}
 		qsoListMatir = append(qsoListMatir, qso)
 	}
+	b.ResetTimer()
 
 	for b.Loop() {
 		var sb strings.Builder
@@ -81,11 +96,14 @@ func BenchmarkWriteFlwydADI(b *testing.B) {
 	if err != nil {
 		b.Fatal(err)
 	}
+	b.ResetTimer()
 
 	for b.Loop() {
 		p = flwyd.NewADIIO()
 		var sb strings.Builder
-		p.Write(doc, &sb)
+		if err := p.Write(doc, &sb); err != nil {
+			b.Fatal(err)
+		}
 		_ = sb.String()
 	}
 }
@@ -95,23 +113,3 @@ func BenchmarkWriteFlwydADI(b *testing.B) {
 func BenchmarkWriteEminlinADI(b *testing.B) {
 }
 */
-
-// BenchmarkWriteGoStdLibDirectJSON benchmarks writing ADIF data using the Go standard library's encoding/json package.
-func BenchmarkWriteGoStdLibDirectJSON(b *testing.B) {
-	doc := &jsonDocument{}
-	decoder := json.NewDecoder(strings.NewReader(benchmarkFileAsJSON))
-	err := decoder.Decode(doc)
-	if err != nil {
-		b.Fatal(err)
-	}
-
-	for b.Loop() {
-		var sb strings.Builder
-		encoder := json.NewEncoder(&sb)
-		err := encoder.Encode(&doc)
-		if err != nil {
-			b.Fatal(err)
-		}
-		_ = sb.String()
-	}
-}

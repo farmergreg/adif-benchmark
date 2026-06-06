@@ -4,6 +4,10 @@ github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437 h1:bravWZ8akTqGcb
 github.com/Matir/adifparser v0.0.0-20230124172935-2c465737f437/go.mod h1:FrRQMGHkxX+CKufTY3SM7WM395NhLiOdx5//5Yi6+aI=
 github.com/farmergreg/adif/v5 v5.0.0-beta.24 h1:03SxtDZ3lR7lDvseQ6DnEHspbV3pJZ6rMHn94tg0mhM=
 github.com/farmergreg/adif/v5 v5.0.0-beta.24/go.mod h1:OhUsKRiMKg9Ix17BA5tt3h5YPo0hkghG/iOY7OpUgRQ=
+github.com/farmergreg/adif/v5 v5.0.0-beta.25 h1:1rpNQu+FtlmtvpgshLXfMWXzIG/63lUpZj1C+PpyT9M=
+github.com/farmergreg/adif/v5 v5.0.0-beta.25/go.mod h1:iZvgLA6yQwahbXBpUcZQwyUVEI/ZMetU60kpBoIKPHY=
+github.com/farmergreg/adif/v5 v5.0.0-beta.26 h1:9qj+YafaeH8xMIPxaSVUJPnmRs2RT6bCStF691pDSmA=
+github.com/farmergreg/adif/v5 v5.0.0-beta.26/go.mod h1:iZvgLA6yQwahbXBpUcZQwyUVEI/ZMetU60kpBoIKPHY=
 github.com/farmergreg/spec/v6 v6.0.0-beta.33 h1:H6hsCerOM3JxgUBYYz0kt4fjp0J+Z0niN7W64ZHBVaU=
 github.com/farmergreg/spec/v6 v6.0.0-beta.33/go.mod h1:SPPWP5cXZtz1f4y/Ui6R5K1ZEMgJkcVA0AEt7/IfH+I=
 github.com/flwyd/adif-multitool v0.1.20 h1:2JhSbFVCxub0IpFkn66M/2Eh6MbrE8OIPE7MDFYqaCQ=

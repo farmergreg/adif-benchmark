@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"strings"
 
 	_ "embed"
@@ -17,24 +16,16 @@ var benchmarkFileAsJSON string
 
 func loadTestData() []adif.Record {
 	var qsoListNative []adif.Record
-	p := adif.NewADIDocumentReader(strings.NewReader(benchmarkFile), false)
-	for {
-		record, _, err := p.Next()
-		if err == io.EOF {
-			break
-		}
-		qsoListNative = append(qsoListNative, record)
+	s := adif.NewScanner(strings.NewReader(benchmarkFile))
+	for s.Scan() {
+		qsoListNative = append(qsoListNative, s.Record())
 	}
 	return qsoListNative
 }
 
-// jsonDocument represents an ADIF document using a json container format.
-type jsonDocument struct {
-	// Header is nil when there is no header.
-	// Otherwise it is a Record with header fields inside.
-	Header map[string]string `json:"header,omitempty"`
-
-	// Records is a slice of Record.
-	// It contains zero or more QSO records.
-	Records []map[string]string `json:"records"`
+func loadFarmerGregDocument() *adif.Document {
+	doc := adif.NewDocument()
+	doc.ReadFrom(strings.NewReader(benchmarkFile)) //nolint:errcheck
+	return doc
 }
+
