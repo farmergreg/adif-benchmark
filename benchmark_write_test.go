@@ -13,7 +13,7 @@ import (
 	flwyd "github.com/flwyd/adif-multitool/adif"
 )
 
-func BenchmarkWriteFarmerGregADI(b *testing.B) {
+func BenchmarkWriteFarmerGregADIFast(b *testing.B) {
 	qsoListNative := loadTestData()
 	b.ResetTimer()
 	for b.Loop() {
